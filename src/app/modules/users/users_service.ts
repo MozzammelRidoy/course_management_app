@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Prisma } from '../../../generated/prisma/client'
 import config from '../../config'
 import AppError from '../../errors/AppError'
@@ -9,6 +10,7 @@ import {
   get_cache_from_RAM
 } from '../../utils/node_cache'
 import bcrypt from 'bcryptjs'
+import { TStudentSignupPayload, TTeacherSignupPayload } from './users_interface'
 
 export const user_findByID_fromDB_or_Cache = async (userId: string) => {
   let value = get_cache_from_RAM(userId)
@@ -33,15 +35,7 @@ export const user_findByID_fromDB_or_Cache = async (userId: string) => {
 
 // signup a student into db.
 
-type TSignupPayload = {
-  instituteId: string
-  email: string
-  phone: string
-  password: string
-  name: string
-}
-
-const signup_student_intoDB = async (payload: TSignupPayload) => {
+const signup_student_intoDB = async (payload: TStudentSignupPayload) => {
   const { name, instituteId, email, phone, password } = payload
   const {
     bcrypt_salt_rounds,
@@ -123,7 +117,6 @@ const signup_student_intoDB = async (payload: TSignupPayload) => {
       accessToken,
       refreshToken
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === 'P2002') {
@@ -138,6 +131,123 @@ const signup_student_intoDB = async (payload: TSignupPayload) => {
     throw error
   }
 }
+
+// create teacher into db by Admin.
+
+const create_Teacher_byAmin_intoDB = async (payload: TTeacherSignupPayload) => {
+  const { name, instituteId, email, phone, password, courseId } = payload
+  const { bcrypt_salt_rounds } = config
+
+  // Hash Password
+  const hashedPassword = await bcrypt.hash(password, Number(bcrypt_salt_rounds))
+
+  try {
+    // Create Transaction
+    await prisma.$transaction(async tx => {
+      // Check if User Already Exists
+      const existingUser = await tx.users.findFirst({
+        where: {
+          OR: [{ email }, { phone }]
+        }
+      })
+
+      if (existingUser) {
+        const field = existingUser.email === email ? 'email' : 'phone'
+        throw new AppError(409, field, `This ${field} is already registered!`)
+      }
+
+      // Check Institute Validity
+      const institute = await tx.institutes.findUnique({
+        where: { id: instituteId, isActive: true, isDeleted: false }
+      })
+
+      if (!institute) {
+        throw new AppError(
+          404,
+          'instituteId',
+          'Institute not found or is currently unavailable.'
+        )
+      }
+
+      // Check Course Validity
+      const course = await tx.courses.findFirst({
+        where: {
+          id: courseId,
+          instituteId: instituteId,
+          isDeleted: false,
+          status: { in: ['ONGOING', 'PENDING'] }
+        }
+      })
+
+      if (!course) {
+        throw new AppError(
+          404,
+          'courseId',
+          'Course not found, unavailable, or does not belong to this institute.'
+        )
+      }
+
+      // Create Teacher Profile
+      const createdTeacher = await tx.users.create({
+        data: {
+          email,
+          phone,
+          password: hashedPassword,
+          role: 'TEACHER',
+          isActive: true,
+          isDeleted: false,
+          profile: {
+            create: {
+              name
+            }
+          },
+          teacher: {
+            create: {
+              instituteId,
+              courseLinks: {
+                create: {
+                  courseId
+                }
+              }
+            }
+          }
+        },
+
+        select: {
+          id: true,
+          email: true,
+          phone: true,
+          role: true,
+          isActive: true,
+          createdAt: true
+        }
+      })
+
+      return createdTeacher
+    })
+
+    return {
+      message: 'Teacher Profile Created Successfully'
+    }
+  } catch (error: any) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        throw new AppError(
+          409,
+          'user',
+          `Failed to create Techer Profile! This user already Registered!`
+        )
+      }
+    }
+
+    // Re-throw AppErrors thrown manually inside transaction
+    if (error instanceof AppError) throw error
+
+    // Generic fallback
+    throw new AppError(400, '', 'Failed to create teacher profile.')
+  }
+}
 export const UserServices = {
-  signup_student_intoDB
+  signup_student_intoDB,
+  create_Teacher_byAmin_intoDB
 }

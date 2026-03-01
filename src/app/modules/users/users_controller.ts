@@ -13,6 +13,18 @@ const signUp_Student = catchAsync(async (req, res) => {
   })
 })
 
+// create teacher profile by admin.
+const create_teacher_profile_byAdmin = catchAsync(async (req, res) => {
+  const result = await UserServices.create_Teacher_byAmin_intoDB(req.body)
+  sendResponse(res, {
+    status: 201,
+    success: true,
+    message: 'Teacher created successfully',
+    data: result
+  })
+})
+
 export const UserController = {
-  signUp_Student
+  signUp_Student,
+  create_teacher_profile_byAdmin
 }

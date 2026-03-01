@@ -7,6 +7,10 @@ enum CourseLevel {
   EXPERT
 }
 
+enum CourseStatus {
+  ONGOING
+  ENDED
+}
 // Course Model Definitions
 model Courses {
   id           String       @id @default(uuid())
@@ -20,6 +24,7 @@ model Courses {
   level        CourseLevel  @default(BEGINNER)
   startDate    DateTime?
   endDate      DateTime?
+  status CourseStatus  @default(ONGOING)
   isAvailable  Boolean      @default(true)
   isDeleted    Boolean      @default(false)
   
