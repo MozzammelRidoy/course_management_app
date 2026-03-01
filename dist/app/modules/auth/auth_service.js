@@ -22,9 +22,10 @@ const node_cache_1 = require("../../utils/node_cache");
 const users_service_1 = require("../users/users_service");
 // user login from database
 const LoginUser_IntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const credential = (0, commonUtils_1.check_Input_isPhone_Or_isEmail)(payload.credential);
     const whereClause = credential.type === 'email'
-        ? { email: payload.credential }
+        ? { email: (_a = payload.credential) === null || _a === void 0 ? void 0 : _a.toLocaleLowerCase() }
         : { phone: payload.credential };
     //checking if the user is exits in the database.
     let user = null;

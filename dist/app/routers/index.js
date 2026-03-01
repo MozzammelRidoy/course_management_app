@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const auth_route_1 = require("../modules/auth/auth_route");
 const institute_route_1 = require("../modules/institutes/institute_route");
 const admin_route_1 = require("../modules/admin/admin_route");
+const users_route_1 = require("../modules/users/users_route");
 /**
  * Main router configuration
  * This file serves as the central point for registering all module routes
@@ -22,6 +23,10 @@ const moduleRoutes = [
     {
         path: '/auth',
         route: auth_route_1.AuthRoutes
+    },
+    {
+        path: '/users',
+        route: users_route_1.UserRoutes
     },
     {
         path: '/institutes',

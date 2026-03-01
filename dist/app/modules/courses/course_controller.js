@@ -12,31 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserController = void 0;
+exports.CourseControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const users_service_1 = require("./users_service");
-// create user user
-const signUp_Student = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield users_service_1.UserServices.signup_student_intoDB(req.body);
+const course_service_1 = require("./course_service");
+// Create Course
+const create_Course_byAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield course_service_1.CourseServices.create_course_byAdmin_intoDB(req.body);
     (0, sendResponse_1.default)(res, {
         status: 201,
         success: true,
-        message: 'User created successfully',
+        message: 'Course Created Successfully',
         data: result
     });
 }));
-// create teacher profile by admin.
-const create_teacher_profile_byAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield users_service_1.UserServices.create_Teacher_byAmin_intoDB(req.body);
-    (0, sendResponse_1.default)(res, {
-        status: 201,
-        success: true,
-        message: 'Teacher created successfully',
-        data: result
-    });
-}));
-exports.UserController = {
-    signUp_Student,
-    create_teacher_profile_byAdmin
+exports.CourseControllers = {
+    create_Course_byAdmin
 };
