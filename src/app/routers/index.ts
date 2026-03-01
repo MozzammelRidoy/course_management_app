@@ -1,5 +1,5 @@
 import express, { Router } from 'express'
-import { DemoModuleRoutes } from '../modules/demo_modules/demo_modules_route'
+import { AuthRoutes } from '../modules/auth/auth_route'
 
 /**
  * Main router configuration
@@ -15,8 +15,8 @@ const routers: Router = express.Router()
  */
 const moduleRoutes = [
   {
-    path: '/demo-modules',
-    route: DemoModuleRoutes
+    path: '/auth',
+    route: AuthRoutes
   }
 ]
 
