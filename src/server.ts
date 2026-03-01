@@ -3,6 +3,7 @@ import { Server } from 'http'
 import app from './app'
 import config from './app/config'
 import { prisma } from './app/shared/prisma'
+import { seed_SuperAdmin_Create } from './app/seed/seed_SuperAdmin'
 
 let server: Server
 let isShuttingDown = false
@@ -48,6 +49,7 @@ async function main() {
   try {
     await prisma.$connect()
     console.log('✅ PostgreSQL connected via Prisma')
+    await seed_SuperAdmin_Create()
 
     server = app.listen(config.port, () => {
       console.log(`🚀 Server running on port ${config.port}`)
