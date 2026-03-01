@@ -8,12 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InstituteServices = void 0;
 const client_1 = require("../../../generated/prisma/client");
+const PrismaQueryBuilder_1 = __importDefault(require("../../builder/PrismaQueryBuilder"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const prisma_1 = require("../../shared/prisma");
 const date_Time_Validation_1 = require("../../utils/date_Time_Validation");
@@ -53,6 +65,47 @@ const create_institute_intoDB = (payload) => __awaiter(void 0, void 0, void 0, f
         throw error;
     }
 });
+// fetch all institutes from database for Admin
+const fetch_all_institutes_forAdmin_fromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isDeleted } = query, rest = __rest(query, ["isDeleted"]);
+    if (query.isActive)
+        query.isActive = query.isActive === 'true' ? true : false;
+    // Pass 'prisma.institutes', NOT 'prisma.institutes.findMany()'
+    const instituteQuery = new PrismaQueryBuilder_1.default(prisma_1.prisma.institutes, rest)
+        .setBaseQuery({ isDeleted: false })
+        .setSecretFields(['isDeleted'])
+        .search(['name', 'code'])
+        .fields()
+        .filter()
+        .sort()
+        .paginate();
+    const result = yield instituteQuery.execute();
+    const meta = yield instituteQuery.countTotal();
+    return {
+        result,
+        meta
+    };
+});
+// fetch all institutes from database for All global
+const fetch_all_institutes_forGlobal_fromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const instituteQuery = new PrismaQueryBuilder_1.default(prisma_1.prisma.institutes, query)
+        .setBaseQuery({ isDeleted: false, isActive: true })
+        .setSecretFields(['isDeleted', 'isActive'])
+        .search(['name', 'code'])
+        .fields()
+        .filter()
+        .sort()
+        .paginate();
+    const result = yield instituteQuery.execute();
+    const meta = yield instituteQuery.countTotal();
+    return {
+        result,
+        meta
+    };
+});
 exports.InstituteServices = {
-    create_institute_intoDB
+    create_institute_intoDB,
+    fetch_all_institutes_forAdmin_fromDB,
+    fetch_all_institutes_forGlobal_fromDB
 };

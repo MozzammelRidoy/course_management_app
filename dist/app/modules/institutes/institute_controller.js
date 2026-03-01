@@ -26,6 +26,30 @@ const create_institute = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         data: result
     });
 }));
+// fetch all institutes for Admin
+const get_All_institutes_forAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield institute_service_1.InstituteServices.fetch_all_institutes_forAdmin_fromDB(req.query);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'All institutes fetched successfully',
+        data: result.result,
+        meta: result.meta
+    });
+}));
+// fetch all institutes for global
+const get_All_institutes_forGlobal = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield institute_service_1.InstituteServices.fetch_all_institutes_forGlobal_fromDB(req.query);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'All institutes fetched successfully',
+        data: result.result,
+        meta: result.meta
+    });
+}));
 exports.InstituteController = {
-    create_institute
+    create_institute,
+    get_All_institutes_forAdmin,
+    get_All_institutes_forGlobal
 };
