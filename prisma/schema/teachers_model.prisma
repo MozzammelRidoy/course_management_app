@@ -1,0 +1,35 @@
+
+// ============================================
+// TEACHERS MODEL - Teacher Specific Data
+// ============================================
+model Teachers {
+  id           String        @id @default(uuid())
+  userId       String        @unique
+  instituteId  String
+  designation  String?
+  department   String?
+
+  
+  // One-to-One: Teacher belongs to ONE User
+  user         Users         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Many-to-One: Teacher belongs to ONE Institute
+  institute    Institutes    @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  
+  // Many-to-Many: Teacher teaches MANY Courses
+  courseLinks  TeacherCourses[]
+  
+  // One-to-Many: Teacher has MANY Results (graded by)
+  results      Results[]
+
+  // Timestamps
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  // ═══════════════════════════════════════════
+  // INDEXES
+  // ═══════════════════════════════════════════
+  @@index([instituteId])      // FK - filter by institute
+  @@index([department])       // Filter by department
+  @@map("teachers")
+}

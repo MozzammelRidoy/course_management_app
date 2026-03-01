@@ -1,0 +1,30 @@
+
+
+
+// Student Model Definations
+
+model Students {
+  id             String        @id @default(uuid())
+  userId         String        @unique
+  instituteId    String
+ 
+  // One-to-One: Student belongs to ONE User
+  user           Users         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Many-to-One: Student belongs to ONE Institute
+  institute      Institutes    @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  
+  // One-to-Many: Student has MANY Results
+  results        Results[]
+  
+  // Many-to-Many: Student has MANY Courses
+  courseLinks    StudentsCourses[]
+
+  // Timestamps
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  // Indexes
+  @@index([instituteId])       // FK - filter by institute
+  @@map("students")
+}
