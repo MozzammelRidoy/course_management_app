@@ -1,0 +1,31 @@
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+// Profile Model 
+model Profiles {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  name        String
+  bio         String?
+  image       Json?    // { secure_url: string, publicId: string }
+  gender      Gender?
+  dateOfBirth DateTime?
+  location    String?
+
+  
+  // One-to-One relationship with Users
+ 
+  user        Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Indexes
+  @@index([userId])            // FK lookup
+  @@map("profiles")
+}

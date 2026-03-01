@@ -1,0 +1,37 @@
+
+
+enum Role {
+  SUPER_ADMIN    
+  ADMIN          
+  TEACHER        
+  STUDENT       
+}
+
+
+
+// Users Model Definition
+
+model Users {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  phone             String?   @unique
+  password          String    // Bcrypt hashed
+  role              Role      @default(STUDENT)
+  passwordChangedAt DateTime? @updatedAt
+  isActive          Boolean   @default(true)
+  isDeleted         Boolean   @default(false)
+
+  // One-to-One relationships
+  profile           Profiles?
+  student           Students?
+  teacher           Teachers?
+
+  // Timestamps
+  createdAt         DateTime?  @default(now())
+  updatedAt         DateTime?  @updatedAt
+
+  // Indexes
+  @@index([role])              // Filter users by role
+  @@index([isActive])          // Filter active users
+  @@map("users")
+}
