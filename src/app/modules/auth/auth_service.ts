@@ -8,7 +8,10 @@ import {
   createToken
 } from '../../utils/commonUtils'
 import bcrypt from 'bcryptjs'
-import { create_cache_into_RAM } from '../../utils/node_cache'
+import {
+  create_cache_into_RAM,
+  delete_cache_from_RAM
+} from '../../utils/node_cache'
 
 // user login from database
 const LoginUser_IntoDB = async (payload: {
@@ -79,6 +82,75 @@ const LoginUser_IntoDB = async (payload: {
   }
 }
 
+// user change password from database
+const change_Password_intoDB = async (
+  userData: TJwtPayload,
+  payload: { oldPassword: string; newPassword: string }
+) => {
+  // Ensure the new password is different from the old password
+  if (payload.oldPassword === payload.newPassword) {
+    throw new AppError(
+      400,
+      '',
+      'New password cannot be the same as the old password!'
+    )
+  }
+
+  const user = await prisma.users.findUnique({
+    where: { id: userData.user_id, isDeleted: false }
+  })
+  if (!user) {
+    throw new AppError(404, '', 'User not found.')
+  }
+
+  if (!user.isActive) {
+    throw new AppError(
+      403,
+      '',
+      'Your account has been blocked. Please contact support for assistance.'
+    )
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    payload.oldPassword,
+    user.password
+  )
+  if (!isPasswordValid) {
+    throw new AppError(403, '', 'Old password is incorrect.')
+  }
+
+  const hashedPassword = await bcrypt.hash(payload.newPassword, 10)
+
+  await prisma.users.update({
+    where: { id: userData.user_id },
+    data: { password: hashedPassword, passwordChangedAt: new Date() }
+  })
+
+  const jwtPayload: TJwtPayload = {
+    user_id: user.id,
+    role: user.role
+  }
+  // create access token
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_token_secret as string,
+    config.jwt_access_token_expires_in as string
+  )
+  // create refresh token.
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_token_secret as string,
+    config.jwt_refresh_token_expires_in as string
+  )
+  delete_cache_from_RAM(user.id)
+
+  return {
+    accessToken,
+    refreshToken
+  }
+}
+
 export const AuthServices = {
-  LoginUser_IntoDB
+  LoginUser_IntoDB,
+  change_Password_intoDB
 }

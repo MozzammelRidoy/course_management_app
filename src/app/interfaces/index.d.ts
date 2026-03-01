@@ -1,4 +1,4 @@
-import { JwtPayload } from 'jsonwebtoken'
+import { TJwtPayload } from './jwtToken_interface'
 
 /**
  * Global declaration extending Express Request interface
@@ -8,12 +8,12 @@ declare global {
   namespace Express {
     interface Request {
       /** JWT payload containing user information */
-      user?: JwtPayload
+      user: TJwtPayload
     }
   }
 }
 
 // Export the extended Request type for convenience
 export type AuthenticatedRequest = Express.Request & {
-  user: JwtPayload
+  user: TJwtPayload
 }
