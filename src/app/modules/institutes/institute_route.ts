@@ -6,6 +6,13 @@ import { InstituteController } from './institute_controller'
 
 const router = express.Router()
 
+// fetch all institutes for Admin
+router.get(
+  '/all',
+  auth('SUPER_ADMIN', 'ADMIN'),
+  InstituteController.get_All_institutes_forAdmin
+)
+
 // create institute by Admin.
 router.post(
   '/create',

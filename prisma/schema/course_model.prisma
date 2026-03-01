@@ -21,6 +21,7 @@ model Courses {
   startDate    DateTime?
   endDate      DateTime?
   isAvailable  Boolean      @default(true)
+  isDeleted    Boolean      @default(false)
   
   // Many-to-One: Course belongs to ONE Institute
   institute    Institutes      @relation(fields: [instituteId], references: [id], onDelete: Cascade)

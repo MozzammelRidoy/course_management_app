@@ -28,7 +28,8 @@ model Results {
   // Timestamps
   enrolledAt   DateTime     @default(now())
   completedAt  DateTime?
-  feedback     String?      
+  feedback     String?
+  isDeleted    Boolean      @default(false)      
 
  
   

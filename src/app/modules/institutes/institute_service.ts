@@ -1,5 +1,6 @@
 import { Prisma } from '../../../generated/prisma/client'
 import { InstitutesModel } from '../../../generated/prisma/models'
+import PrismaQueryBuilder from '../../builder/PrismaQueryBuilder'
 import AppError from '../../errors/AppError'
 import { prisma } from '../../shared/prisma'
 import { isValidDate } from '../../utils/date_Time_Validation'
@@ -59,6 +60,33 @@ const create_institute_intoDB = async (payload: InstitutesModel) => {
   }
 }
 
+// fetch all institutes from database for Admin
+const fetch_all_institutes_forAdmin_fromDB = async (
+  query: Record<string, unknown>
+) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isDeleted, ...rest } = query
+  if (query.isActive) query.isActive = query.isActive === 'true' ? true : false
+  // Pass 'prisma.institutes', NOT 'prisma.institutes.findMany()'
+  const instituteQuery = new PrismaQueryBuilder(prisma.institutes, rest)
+    .setBaseQuery({ isDeleted: false })
+    .setSecretFields(['isDeleted'])
+    .search(['name', 'code'])
+    .fields()
+    .filter()
+    .sort()
+    .paginate()
+
+  const result = await instituteQuery.execute()
+  const meta = await instituteQuery.countTotal()
+
+  return {
+    data: result,
+    meta
+  }
+}
+
 export const InstituteServices = {
-  create_institute_intoDB
+  create_institute_intoDB,
+  fetch_all_institutes_forAdmin_fromDB
 }
