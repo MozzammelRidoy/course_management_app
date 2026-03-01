@@ -2,6 +2,7 @@ import express, { Router } from 'express'
 import { AuthRoutes } from '../modules/auth/auth_route'
 import { InstituteRoutes } from '../modules/institutes/institute_route'
 import { AdminRoutes } from '../modules/admin/admin_route'
+import { UserRoutes } from '../modules/users/users_route'
 
 /**
  * Main router configuration
@@ -19,6 +20,10 @@ const moduleRoutes = [
   {
     path: '/auth',
     route: AuthRoutes
+  },
+  {
+    path: '/users',
+    route: UserRoutes
   },
   {
     path: '/institutes',

@@ -24,7 +24,7 @@ const LoginUser_IntoDB = async (payload: {
 
   const whereClause =
     credential.type === 'email'
-      ? { email: payload.credential }
+      ? { email: payload.credential?.toLocaleLowerCase() }
       : { phone: payload.credential }
 
   //checking if the user is exits in the database.
