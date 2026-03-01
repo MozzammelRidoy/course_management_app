@@ -1,7 +1,6 @@
 
-// ============================================
-// INSTITUTES MODEL - Educational Institutions
-// ============================================
+// Institutes model definition
+
 model Institutes {
   id           String   @id @default(uuid())
   name         String
@@ -14,9 +13,7 @@ model Institutes {
   establishedAt DateTime?
   isActive     Boolean  @default(true)
 
-  // ═══════════════════════════════════════════
-  // RELATIONSHIPS (One-to-Many)
-  // ═══════════════════════════════════════════
+  // One-to-Many: Institute has MANY Courses
   students     Students[]
   teachers     Teachers[]
   courses      Courses[]
@@ -25,9 +22,7 @@ model Institutes {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  // ═══════════════════════════════════════════
-  // INDEXES
-  // ═══════════════════════════════════════════
+ // Indexes & Constraints
   @@index([code])              // Unique lookups (already unique)
   @@index([isActive])          // Filter active institutes
   @@map("institutes")

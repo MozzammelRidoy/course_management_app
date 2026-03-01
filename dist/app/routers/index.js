@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const demo_modules_route_1 = require("../modules/demo_modules/demo_modules_route");
+const auth_route_1 = require("../modules/auth/auth_route");
 /**
  * Main router configuration
  * This file serves as the central point for registering all module routes
@@ -18,8 +18,8 @@ const routers = express_1.default.Router();
  */
 const moduleRoutes = [
     {
-        path: '/demo-modules',
-        route: demo_modules_route_1.DemoModuleRoutes
+        path: '/auth',
+        route: auth_route_1.AuthRoutes
     }
 ];
 /**

@@ -11,11 +11,11 @@ enum CourseLevel {
 model Courses {
   id           String       @id @default(uuid())
   instituteId  String
-  code         String       // Course code (e.g., CS101)
+  code         String       
   name         String
   description  String?
   credits      Int          @default(3)
-  duration     Int          @default(12)    // Duration in weeks
+  duration     Int          @default(12)   
   category     String?
   level        CourseLevel  @default(BEGINNER)
   startDate    DateTime?
@@ -82,7 +82,6 @@ model TeacherCourses {
   teacherId   String
   courseId    String
   assignedAt  DateTime @default(now())
-  isActive    Boolean  @default(true)
 
   // One-to-One: Assignment belongs to ONE Teacher
   teacher     Teachers @relation(fields: [teacherId], references: [id], onDelete: Cascade)

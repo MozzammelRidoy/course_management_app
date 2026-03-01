@@ -17,18 +17,18 @@ model Results {
   teacherId    String?      
   
   // Grade Information
-  score        Float        // 0-100
-  grade        String?      // Letter grade: A, B, C, D, F
+  score        Float        
+  grade        String?      
   status       ResultStatus @default(ENROLLED)
   
   // Academic Period
-  semester     String?      // e.g., "Fall", "Spring", "Summer"
-  academicYear String?      // e.g., "2024-2025"
+  semester     String?      
+  academicYear String?      
   
   // Timestamps
   enrolledAt   DateTime     @default(now())
   completedAt  DateTime?
-  feedback     String?      // Teacher feedback
+  feedback     String?      
 
  
   

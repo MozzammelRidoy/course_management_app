@@ -15,7 +15,7 @@ model Users {
   id                String    @id @default(uuid())
   email             String    @unique
   phone             String?   @unique
-  password          String    // Bcrypt hashed
+  password          String   
   role              Role      @default(STUDENT)
   passwordChangedAt DateTime? @updatedAt
   isActive          Boolean   @default(true)

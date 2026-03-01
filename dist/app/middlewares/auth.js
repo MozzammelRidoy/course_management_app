@@ -16,6 +16,8 @@ const config_1 = __importDefault(require("../config"));
 const AppError_1 = __importDefault(require("../errors/AppError"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const commonUtils_1 = require("../utils/commonUtils");
+const users_service_1 = require("../modules/users/users_service");
+const node_cache_1 = require("../utils/node_cache");
 // initiate authentication route auth function
 const auth = (...rolesAndFlags) => {
     // Check if the last argument is a boolean flag
@@ -40,34 +42,22 @@ const auth = (...rolesAndFlags) => {
         const decoded = (0, commonUtils_1.verifyToken)(token, config_1.default.jwt_access_token_secret);
         const { user_id, role, iat } = decoded;
         // Check if user exists (implementation depends on your user model)
-        // const user = await User.isUserStatusCheckFindBy_id(user_id);
-        // if (!user) {
-        //   throw new AppError(404, 'NOT_FOUND', 'User not found!');
-        // }
-        // Check if user is deleted
-        // if (user.isDeleted) {
-        //   throw new AppError(401, 'UNAUTHORIZED', 'This user has been deleted!');
-        // }
-        // Check if user is blocked
-        // if (user.status === 'blocked') {
-        //   throw new AppError(403, 'FORBIDDEN', 'This user is blocked!');
-        // }
+        const user = yield (0, users_service_1.user_findByID_fromDB_or_Cache)(user_id);
         // Check if user role matches
-        // if (user.role !== role) {
-        //   throw new AppError(403, 'FORBIDDEN', 'Invalid user role!');
-        // }
+        if (user.role !== role) {
+            throw new AppError_1.default(403, 'FORBIDDEN', 'Invalid user role!');
+        }
         // Check if password was changed after token was issued
-        // if (user.passwordChangedAt) {
-        //   const isPasswordChanged = User.isJWTIssuedAtBeforePasswordChanged(
-        //     user.passwordChangedAt,
-        //     iat as number
-        //   );
-        //   if (isPasswordChanged) {
-        //     // Clear cache if needed
-        //     // delete_cache_from_RAM(user._id?.toString() as string);
-        //     throw new AppError(401, 'UNAUTHORIZED', 'Password has been changed. Please login again.');
-        //   }
-        // }
+        if (user.passwordChangedAt) {
+            const passwordChangedTime = new Date(user.passwordChangedAt).getTime() / 1000;
+            const passwordChangedTimeInt = parseInt(passwordChangedTime.toString());
+            const isPasswordChanged = passwordChangedTimeInt > iat;
+            if (isPasswordChanged) {
+                // Clear cache if needed
+                (0, node_cache_1.delete_cache_from_RAM)(user_id);
+                throw new AppError_1.default(401, 'UNAUTHORIZED', 'Password has been changed. Please login again.');
+            }
+        }
         // Check if user has required role
         if (requiredRoles.length > 0 && !requiredRoles.includes(role)) {
             throw new AppError_1.default(403, 'FORBIDDEN', 'You do not have permission to perform this action.');

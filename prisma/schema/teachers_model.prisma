@@ -1,7 +1,5 @@
 
-// ============================================
-// TEACHERS MODEL - Teacher Specific Data
-// ============================================
+// Teachers model definition
 model Teachers {
   id           String        @id @default(uuid())
   userId       String        @unique
@@ -26,9 +24,7 @@ model Teachers {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
-  // ═══════════════════════════════════════════
-  // INDEXES
-  // ═══════════════════════════════════════════
+  // Indexes & Constraints
   @@index([instituteId])      // FK - filter by institute
   @@index([department])       // Filter by department
   @@map("teachers")
