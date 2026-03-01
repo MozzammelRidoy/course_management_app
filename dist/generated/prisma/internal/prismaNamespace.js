@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.defineExtension = exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.UsersScalarFieldEnum = exports.TeachersScalarFieldEnum = exports.StudentsScalarFieldEnum = exports.UserScalarFieldEnum = exports.ResultsScalarFieldEnum = exports.ProfilesScalarFieldEnum = exports.InstitutesScalarFieldEnum = exports.TeacherCoursesScalarFieldEnum = exports.StudentsCoursesScalarFieldEnum = exports.CoursesScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
+exports.defineExtension = exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.UsersScalarFieldEnum = exports.TeachersScalarFieldEnum = exports.StudentsScalarFieldEnum = exports.ResultsScalarFieldEnum = exports.ProfilesScalarFieldEnum = exports.InstitutesScalarFieldEnum = exports.TeacherCoursesScalarFieldEnum = exports.StudentsCoursesScalarFieldEnum = exports.CoursesScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.prismaVersion = exports.getExtensionContext = exports.Decimal = exports.Sql = exports.raw = exports.join = exports.empty = exports.sql = exports.PrismaClientValidationError = exports.PrismaClientInitializationError = exports.PrismaClientRustPanicError = exports.PrismaClientUnknownRequestError = exports.PrismaClientKnownRequestError = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/client"));
 /**
  * Prisma Errors
@@ -109,7 +109,6 @@ exports.ModelName = {
     Institutes: 'Institutes',
     Profiles: 'Profiles',
     Results: 'Results',
-    User: 'User',
     Students: 'Students',
     Teachers: 'Teachers',
     Users: 'Users'
@@ -153,7 +152,6 @@ exports.TeacherCoursesScalarFieldEnum = {
     teacherId: 'teacherId',
     courseId: 'courseId',
     assignedAt: 'assignedAt',
-    isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
@@ -168,6 +166,7 @@ exports.InstitutesScalarFieldEnum = {
     website: 'website',
     establishedAt: 'establishedAt',
     isActive: 'isActive',
+    isDeleted: 'isDeleted',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
@@ -198,9 +197,6 @@ exports.ResultsScalarFieldEnum = {
     feedback: 'feedback',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
-};
-exports.UserScalarFieldEnum = {
-    id: 'id'
 };
 exports.StudentsScalarFieldEnum = {
     id: 'id',

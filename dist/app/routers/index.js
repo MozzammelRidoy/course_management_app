@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const auth_route_1 = require("../modules/auth/auth_route");
+const institute_route_1 = require("../modules/institutes/institute_route");
 /**
  * Main router configuration
  * This file serves as the central point for registering all module routes
@@ -20,6 +21,10 @@ const moduleRoutes = [
     {
         path: '/auth',
         route: auth_route_1.AuthRoutes
+    },
+    {
+        path: '/institutes',
+        route: institute_route_1.InstituteRoutes
     }
 ];
 /**

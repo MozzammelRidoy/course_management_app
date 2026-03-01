@@ -48,7 +48,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.UsersScalarFieldEnum = exports.TeachersScalarFieldEnum = exports.StudentsScalarFieldEnum = exports.UserScalarFieldEnum = exports.ResultsScalarFieldEnum = exports.ProfilesScalarFieldEnum = exports.InstitutesScalarFieldEnum = exports.TeacherCoursesScalarFieldEnum = exports.StudentsCoursesScalarFieldEnum = exports.CoursesScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
+exports.JsonNullValueFilter = exports.NullsOrder = exports.QueryMode = exports.NullableJsonNullValueInput = exports.SortOrder = exports.UsersScalarFieldEnum = exports.TeachersScalarFieldEnum = exports.StudentsScalarFieldEnum = exports.ResultsScalarFieldEnum = exports.ProfilesScalarFieldEnum = exports.InstitutesScalarFieldEnum = exports.TeacherCoursesScalarFieldEnum = exports.StudentsCoursesScalarFieldEnum = exports.CoursesScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/index-browser"));
 exports.Decimal = runtime.Decimal;
 exports.NullTypes = {
@@ -81,7 +81,6 @@ exports.ModelName = {
     Institutes: 'Institutes',
     Profiles: 'Profiles',
     Results: 'Results',
-    User: 'User',
     Students: 'Students',
     Teachers: 'Teachers',
     Users: 'Users'
@@ -125,7 +124,6 @@ exports.TeacherCoursesScalarFieldEnum = {
     teacherId: 'teacherId',
     courseId: 'courseId',
     assignedAt: 'assignedAt',
-    isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
@@ -140,6 +138,7 @@ exports.InstitutesScalarFieldEnum = {
     website: 'website',
     establishedAt: 'establishedAt',
     isActive: 'isActive',
+    isDeleted: 'isDeleted',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };
@@ -170,9 +169,6 @@ exports.ResultsScalarFieldEnum = {
     feedback: 'feedback',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
-};
-exports.UserScalarFieldEnum = {
-    id: 'id'
 };
 exports.StudentsScalarFieldEnum = {
     id: 'id',

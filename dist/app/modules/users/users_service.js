@@ -23,7 +23,7 @@ const user_findByID_fromDB_or_Cache = (userId) => __awaiter(void 0, void 0, void
             where: { id: userId, isDeleted: false }
         });
         if (!user) {
-            throw new AppError_1.default(404, '', 'This user is not found!');
+            throw new AppError_1.default(404, 'not-found', 'This user is not found!');
         }
         if (!user.isActive) {
             throw new AppError_1.default(403, '', 'This user is already blocked!');
