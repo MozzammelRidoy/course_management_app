@@ -5,13 +5,15 @@ import { TJwtPayload } from '../../interfaces/jwtToken_interface'
 import { prisma } from '../../shared/prisma'
 import {
   check_Input_isPhone_Or_isEmail,
-  createToken
+  createToken,
+  verifyToken
 } from '../../utils/commonUtils'
 import bcrypt from 'bcryptjs'
 import {
   create_cache_into_RAM,
   delete_cache_from_RAM
 } from '../../utils/node_cache'
+import { user_findByID_fromDB_or_Cache } from '../users/users_service'
 
 // user login from database
 const LoginUser_IntoDB = async (payload: {
@@ -150,7 +152,50 @@ const change_Password_intoDB = async (
   }
 }
 
+// token genarate from refresh token
+const generate_Token_from_RefreshToken = async (token: string) => {
+  // Verify token
+  const decoded = verifyToken(token, config.jwt_refresh_token_secret as string)
+  const { user_id, iat } = decoded
+
+  // Check if user exists (implementation depends on your user model)
+  const user: UsersModel = await user_findByID_fromDB_or_Cache(user_id)
+
+  // Check if password was changed after token was issued
+  if (user.passwordChangedAt) {
+    const passwordChangedTime =
+      new Date(user.passwordChangedAt).getTime() / 1000
+    const passwordChangedTimeInt = parseInt(passwordChangedTime.toString())
+
+    const isPasswordChanged = passwordChangedTimeInt > iat!
+    if (isPasswordChanged) {
+      // Clear cache if needed
+      delete_cache_from_RAM(user_id)
+      throw new AppError(
+        401,
+        'UNAUTHORIZED',
+        'Password has been changed. Please login again.'
+      )
+    }
+  }
+
+  const jwtPayload: TJwtPayload = {
+    user_id: user.id,
+    role: user.role
+  }
+  // create access token
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_token_secret as string,
+    config.jwt_access_token_expires_in as string
+  )
+
+  return {
+    accessToken
+  }
+}
 export const AuthServices = {
   LoginUser_IntoDB,
-  change_Password_intoDB
+  change_Password_intoDB,
+  generate_Token_from_RefreshToken
 }

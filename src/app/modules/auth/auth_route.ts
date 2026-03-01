@@ -21,4 +21,6 @@ router.post(
   AuthControllers.change_Password
 )
 
+// generate access token from refresh token
+router.get('/generate-access-token', AuthControllers.generate_AccessToken)
 export const AuthRoutes = router
