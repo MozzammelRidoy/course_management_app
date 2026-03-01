@@ -1,0 +1,101 @@
+
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+// Course Model Definitions
+model Courses {
+  id           String       @id @default(uuid())
+  instituteId  String
+  code         String       // Course code (e.g., CS101)
+  name         String
+  description  String?
+  credits      Int          @default(3)
+  duration     Int          @default(12)    // Duration in weeks
+  category     String?
+  level        CourseLevel  @default(BEGINNER)
+  startDate    DateTime?
+  endDate      DateTime?
+  isAvailable  Boolean      @default(true)
+  
+  // Many-to-One: Course belongs to ONE Institute
+  institute    Institutes      @relation(fields: [instituteId], references: [id], onDelete: Cascade)
+  
+  // Many-to-Many: Course has MANY Students
+  studentLinks StudentsCourses[]
+  
+  // Many-to-Many: Course has MANY Teachers
+  teacherLinks TeacherCourses[]
+  
+  // One-to-Many: Course has MANY Results
+  results      Results[]
+
+  // Timestamps
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Indexes & Constraints
+  @@index([instituteId])     // FK - filter by institute
+  @@index([level])           // Filter by level
+  @@index([isAvailable])     // Filter available courses
+  @@index([category])        // Filter by category
+  @@unique([code, instituteId]) // Same course code can exist in different institutes
+  @@map("courses")
+}
+
+// Students Courses - Junction Table (M:N)
+
+model StudentsCourses {
+  id          String       @id @default(uuid())
+  studentId   String
+  courseId    String
+  enrolledAt  DateTime     @default(now())
+  status      ResultStatus @default(ENROLLED)
+
+  // One-to-One: Enrollment belongs to ONE Student
+  student     Students     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course      Courses      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  
+  // Indexes & Constraints
+
+  @@unique([studentId, courseId])  // Prevent duplicate enrollments
+  @@index([studentId])       // FK lookup
+  @@index([courseId])        // FK lookup
+  @@index([status])          // Filter by enrollment status
+  @@map("students_courses")
+}
+
+
+// Teachers Courses - Junction Table (M:N)
+
+model TeacherCourses {
+  id          String   @id @default(uuid())
+  teacherId   String
+  courseId    String
+  assignedAt  DateTime @default(now())
+  isActive    Boolean  @default(true)
+
+  // One-to-One: Assignment belongs to ONE Teacher
+  teacher     Teachers @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  course      Courses  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+
+  // Indexes & Constraints
+  @@unique([teacherId, courseId])  // Prevent duplicate assignments
+  @@index([teacherId])       // FK lookup
+  @@index([courseId])        // FK lookup
+  @@map("teacher_courses")
+}
