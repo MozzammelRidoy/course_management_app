@@ -7,12 +7,13 @@ import {
 
 export const user_findByID_fromDB_or_Cache = async (userId: string) => {
   let value = get_cache_from_RAM(userId)
+
   if (value === undefined) {
     const user = await prisma.users.findUnique({
       where: { id: userId, isDeleted: false }
     })
     if (!user) {
-      throw new AppError(404, '', 'This user is not found!')
+      throw new AppError(404, 'not-found', 'This user is not found!')
     }
 
     if (!user.isActive) {

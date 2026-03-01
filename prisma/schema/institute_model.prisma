@@ -12,6 +12,7 @@ model Institutes {
   website      String?
   establishedAt DateTime?
   isActive     Boolean  @default(true)
+  isDeleted    Boolean  @default(false)
 
   // One-to-Many: Institute has MANY Courses
   students     Students[]

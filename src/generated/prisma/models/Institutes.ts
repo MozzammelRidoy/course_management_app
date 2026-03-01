@@ -35,6 +35,7 @@ export type InstitutesMinAggregateOutputType = {
   website: string | null
   establishedAt: Date | null
   isActive: boolean | null
+  isDeleted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +51,7 @@ export type InstitutesMaxAggregateOutputType = {
   website: string | null
   establishedAt: Date | null
   isActive: boolean | null
+  isDeleted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -65,6 +67,7 @@ export type InstitutesCountAggregateOutputType = {
   website: number
   establishedAt: number
   isActive: number
+  isDeleted: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -81,6 +84,7 @@ export type InstitutesMinAggregateInputType = {
   website?: true
   establishedAt?: true
   isActive?: true
+  isDeleted?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -96,6 +100,7 @@ export type InstitutesMaxAggregateInputType = {
   website?: true
   establishedAt?: true
   isActive?: true
+  isDeleted?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -111,6 +116,7 @@ export type InstitutesCountAggregateInputType = {
   website?: true
   establishedAt?: true
   isActive?: true
+  isDeleted?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -206,6 +212,7 @@ export type InstitutesGroupByOutputType = {
   website: string | null
   establishedAt: Date | null
   isActive: boolean
+  isDeleted: boolean
   createdAt: Date
   updatedAt: Date
   _count: InstitutesCountAggregateOutputType | null
@@ -244,6 +251,7 @@ export type InstitutesWhereInput = {
     | string
     | null
   isActive?: Prisma.BoolFilter<'Institutes'> | boolean
+  isDeleted?: Prisma.BoolFilter<'Institutes'> | boolean
   createdAt?: Prisma.DateTimeFilter<'Institutes'> | Date | string
   updatedAt?: Prisma.DateTimeFilter<'Institutes'> | Date | string
   students?: Prisma.StudentsListRelationFilter
@@ -262,6 +270,7 @@ export type InstitutesOrderByWithRelationInput = {
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   establishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   students?: Prisma.StudentsOrderByRelationAggregateInput
@@ -288,6 +297,7 @@ export type InstitutesWhereUniqueInput = Prisma.AtLeast<
       | string
       | null
     isActive?: Prisma.BoolFilter<'Institutes'> | boolean
+    isDeleted?: Prisma.BoolFilter<'Institutes'> | boolean
     createdAt?: Prisma.DateTimeFilter<'Institutes'> | Date | string
     updatedAt?: Prisma.DateTimeFilter<'Institutes'> | Date | string
     students?: Prisma.StudentsListRelationFilter
@@ -308,6 +318,7 @@ export type InstitutesOrderByWithAggregationInput = {
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   establishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.InstitutesCountOrderByAggregateInput
@@ -352,6 +363,7 @@ export type InstitutesScalarWhereWithAggregatesInput = {
     | string
     | null
   isActive?: Prisma.BoolWithAggregatesFilter<'Institutes'> | boolean
+  isDeleted?: Prisma.BoolWithAggregatesFilter<'Institutes'> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<'Institutes'> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<'Institutes'> | Date | string
 }
@@ -367,6 +379,7 @@ export type InstitutesCreateInput = {
   website?: string | null
   establishedAt?: Date | string | null
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   students?: Prisma.StudentsCreateNestedManyWithoutInstituteInput
@@ -385,6 +398,7 @@ export type InstitutesUncheckedCreateInput = {
   website?: string | null
   establishedAt?: Date | string | null
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   students?: Prisma.StudentsUncheckedCreateNestedManyWithoutInstituteInput
@@ -407,6 +421,7 @@ export type InstitutesUpdateInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentsUpdateManyWithoutInstituteNestedInput
@@ -429,6 +444,7 @@ export type InstitutesUncheckedUpdateInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentsUncheckedUpdateManyWithoutInstituteNestedInput
@@ -447,6 +463,7 @@ export type InstitutesCreateManyInput = {
   website?: string | null
   establishedAt?: Date | string | null
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -466,6 +483,7 @@ export type InstitutesUpdateManyMutationInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -485,6 +503,7 @@ export type InstitutesUncheckedUpdateManyInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -505,6 +524,7 @@ export type InstitutesCountOrderByAggregateInput = {
   website?: Prisma.SortOrder
   establishedAt?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -520,6 +540,7 @@ export type InstitutesMaxOrderByAggregateInput = {
   website?: Prisma.SortOrder
   establishedAt?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -535,6 +556,7 @@ export type InstitutesMinOrderByAggregateInput = {
   website?: Prisma.SortOrder
   establishedAt?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -628,6 +650,7 @@ export type InstitutesCreateWithoutCoursesInput = {
   website?: string | null
   establishedAt?: Date | string | null
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   students?: Prisma.StudentsCreateNestedManyWithoutInstituteInput
@@ -645,6 +668,7 @@ export type InstitutesUncheckedCreateWithoutCoursesInput = {
   website?: string | null
   establishedAt?: Date | string | null
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   students?: Prisma.StudentsUncheckedCreateNestedManyWithoutInstituteInput
@@ -694,6 +718,7 @@ export type InstitutesUpdateWithoutCoursesInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentsUpdateManyWithoutInstituteNestedInput
@@ -715,6 +740,7 @@ export type InstitutesUncheckedUpdateWithoutCoursesInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentsUncheckedUpdateManyWithoutInstituteNestedInput
@@ -732,6 +758,7 @@ export type InstitutesCreateWithoutStudentsInput = {
   website?: string | null
   establishedAt?: Date | string | null
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   teachers?: Prisma.TeachersCreateNestedManyWithoutInstituteInput
@@ -749,6 +776,7 @@ export type InstitutesUncheckedCreateWithoutStudentsInput = {
   website?: string | null
   establishedAt?: Date | string | null
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   teachers?: Prisma.TeachersUncheckedCreateNestedManyWithoutInstituteInput
@@ -798,6 +826,7 @@ export type InstitutesUpdateWithoutStudentsInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teachers?: Prisma.TeachersUpdateManyWithoutInstituteNestedInput
@@ -819,6 +848,7 @@ export type InstitutesUncheckedUpdateWithoutStudentsInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teachers?: Prisma.TeachersUncheckedUpdateManyWithoutInstituteNestedInput
@@ -836,6 +866,7 @@ export type InstitutesCreateWithoutTeachersInput = {
   website?: string | null
   establishedAt?: Date | string | null
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   students?: Prisma.StudentsCreateNestedManyWithoutInstituteInput
@@ -853,6 +884,7 @@ export type InstitutesUncheckedCreateWithoutTeachersInput = {
   website?: string | null
   establishedAt?: Date | string | null
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   students?: Prisma.StudentsUncheckedCreateNestedManyWithoutInstituteInput
@@ -902,6 +934,7 @@ export type InstitutesUpdateWithoutTeachersInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentsUpdateManyWithoutInstituteNestedInput
@@ -923,6 +956,7 @@ export type InstitutesUncheckedUpdateWithoutTeachersInput = {
     | string
     | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   students?: Prisma.StudentsUncheckedUpdateManyWithoutInstituteNestedInput
@@ -1006,6 +1040,7 @@ export type InstitutesSelect<
     website?: boolean
     establishedAt?: boolean
     isActive?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     students?: boolean | Prisma.Institutes$studentsArgs<ExtArgs>
@@ -1031,6 +1066,7 @@ export type InstitutesSelectCreateManyAndReturn<
     website?: boolean
     establishedAt?: boolean
     isActive?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   },
@@ -1052,6 +1088,7 @@ export type InstitutesSelectUpdateManyAndReturn<
     website?: boolean
     establishedAt?: boolean
     isActive?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   },
@@ -1069,6 +1106,7 @@ export type InstitutesSelectScalar = {
   website?: boolean
   establishedAt?: boolean
   isActive?: boolean
+  isDeleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
@@ -1087,6 +1125,7 @@ export type InstitutesOmit<
   | 'website'
   | 'establishedAt'
   | 'isActive'
+  | 'isDeleted'
   | 'createdAt'
   | 'updatedAt',
   ExtArgs['result']['institutes']
@@ -1131,6 +1170,7 @@ export type $InstitutesPayload<
       website: string | null
       establishedAt: Date | null
       isActive: boolean
+      isDeleted: boolean
       createdAt: Date
       updatedAt: Date
     },
@@ -1768,6 +1808,7 @@ export interface InstitutesFieldRefs {
   readonly website: Prisma.FieldRef<'Institutes', 'String'>
   readonly establishedAt: Prisma.FieldRef<'Institutes', 'DateTime'>
   readonly isActive: Prisma.FieldRef<'Institutes', 'Boolean'>
+  readonly isDeleted: Prisma.FieldRef<'Institutes', 'Boolean'>
   readonly createdAt: Prisma.FieldRef<'Institutes', 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<'Institutes', 'DateTime'>
 }

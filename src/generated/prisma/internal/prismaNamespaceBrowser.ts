@@ -60,7 +60,6 @@ export const ModelName = {
   Institutes: 'Institutes',
   Profiles: 'Profiles',
   Results: 'Results',
-  User: 'User',
   Students: 'Students',
   Teachers: 'Teachers',
   Users: 'Users'
@@ -120,7 +119,6 @@ export const TeacherCoursesScalarFieldEnum = {
   teacherId: 'teacherId',
   courseId: 'courseId',
   assignedAt: 'assignedAt',
-  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -139,6 +137,7 @@ export const InstitutesScalarFieldEnum = {
   website: 'website',
   establishedAt: 'establishedAt',
   isActive: 'isActive',
+  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -181,13 +180,6 @@ export const ResultsScalarFieldEnum = {
 
 export type ResultsScalarFieldEnum =
   (typeof ResultsScalarFieldEnum)[keyof typeof ResultsScalarFieldEnum]
-
-export const UserScalarFieldEnum = {
-  id: 'id'
-} as const
-
-export type UserScalarFieldEnum =
-  (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 export const StudentsScalarFieldEnum = {
   id: 'id',

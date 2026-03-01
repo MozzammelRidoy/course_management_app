@@ -418,7 +418,6 @@ export const ModelName = {
   Institutes: 'Institutes',
   Profiles: 'Profiles',
   Results: 'Results',
-  User: 'User',
   Students: 'Students',
   Teachers: 'Teachers',
   Users: 'Users'
@@ -450,7 +449,6 @@ export type TypeMap<
       | 'institutes'
       | 'profiles'
       | 'results'
-      | 'user'
       | 'students'
       | 'teachers'
       | 'users'
@@ -913,82 +911,6 @@ export type TypeMap<
         }
       }
     }
-    User: {
-      payload: Prisma.$UserPayload<ExtArgs>
-      fields: Prisma.UserFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.UserFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>
-        }
-        findFirst: {
-          args: Prisma.UserFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>
-        }
-        findMany: {
-          args: Prisma.UserFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>[]
-        }
-        create: {
-          args: Prisma.UserCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>
-        }
-        createMany: {
-          args: Prisma.UserCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>[]
-        }
-        delete: {
-          args: Prisma.UserDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>
-        }
-        update: {
-          args: Prisma.UserUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>
-        }
-        deleteMany: {
-          args: Prisma.UserDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.UserUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.UserUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>[]
-        }
-        upsert: {
-          args: Prisma.UserUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPayload>
-        }
-        aggregate: {
-          args: Prisma.UserAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUser>
-        }
-        groupBy: {
-          args: Prisma.UserGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.UserCountArgs<ExtArgs>
-          result:
-            | runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType>
-            | number
-        }
-      }
-    }
     Students: {
       payload: Prisma.$StudentsPayload<ExtArgs>
       fields: Prisma.StudentsFieldRefs
@@ -1294,7 +1216,6 @@ export const TeacherCoursesScalarFieldEnum = {
   teacherId: 'teacherId',
   courseId: 'courseId',
   assignedAt: 'assignedAt',
-  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1313,6 +1234,7 @@ export const InstitutesScalarFieldEnum = {
   website: 'website',
   establishedAt: 'establishedAt',
   isActive: 'isActive',
+  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1355,13 +1277,6 @@ export const ResultsScalarFieldEnum = {
 
 export type ResultsScalarFieldEnum =
   (typeof ResultsScalarFieldEnum)[keyof typeof ResultsScalarFieldEnum]
-
-export const UserScalarFieldEnum = {
-  id: 'id'
-} as const
-
-export type UserScalarFieldEnum =
-  (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 export const StudentsScalarFieldEnum = {
   id: 'id',
@@ -1706,7 +1621,6 @@ export type GlobalOmitConfig = {
   institutes?: Prisma.InstitutesOmit
   profiles?: Prisma.ProfilesOmit
   results?: Prisma.ResultsOmit
-  user?: Prisma.UserOmit
   students?: Prisma.StudentsOmit
   teachers?: Prisma.TeachersOmit
   users?: Prisma.UsersOmit

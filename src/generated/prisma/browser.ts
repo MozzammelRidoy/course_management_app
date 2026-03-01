@@ -47,11 +47,6 @@ export type Profiles = Prisma.ProfilesModel
  */
 export type Results = Prisma.ResultsModel
 /**
- * Model User
- *
- */
-export type User = Prisma.UserModel
-/**
  * Model Students
  *
  */

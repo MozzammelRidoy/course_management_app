@@ -29,7 +29,6 @@ export type TeacherCoursesMinAggregateOutputType = {
   teacherId: string | null
   courseId: string | null
   assignedAt: Date | null
-  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -39,7 +38,6 @@ export type TeacherCoursesMaxAggregateOutputType = {
   teacherId: string | null
   courseId: string | null
   assignedAt: Date | null
-  isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,7 +47,6 @@ export type TeacherCoursesCountAggregateOutputType = {
   teacherId: number
   courseId: number
   assignedAt: number
-  isActive: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -60,7 +57,6 @@ export type TeacherCoursesMinAggregateInputType = {
   teacherId?: true
   courseId?: true
   assignedAt?: true
-  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -70,7 +66,6 @@ export type TeacherCoursesMaxAggregateInputType = {
   teacherId?: true
   courseId?: true
   assignedAt?: true
-  isActive?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -80,7 +75,6 @@ export type TeacherCoursesCountAggregateInputType = {
   teacherId?: true
   courseId?: true
   assignedAt?: true
-  isActive?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -174,7 +168,6 @@ export type TeacherCoursesGroupByOutputType = {
   teacherId: string
   courseId: string
   assignedAt: Date
-  isActive: boolean
   createdAt: Date
   updatedAt: Date
   _count: TeacherCoursesCountAggregateOutputType | null
@@ -204,7 +197,6 @@ export type TeacherCoursesWhereInput = {
   teacherId?: Prisma.StringFilter<'TeacherCourses'> | string
   courseId?: Prisma.StringFilter<'TeacherCourses'> | string
   assignedAt?: Prisma.DateTimeFilter<'TeacherCourses'> | Date | string
-  isActive?: Prisma.BoolFilter<'TeacherCourses'> | boolean
   createdAt?: Prisma.DateTimeFilter<'TeacherCourses'> | Date | string
   updatedAt?: Prisma.DateTimeFilter<'TeacherCourses'> | Date | string
   teacher?: Prisma.XOR<
@@ -222,7 +214,6 @@ export type TeacherCoursesOrderByWithRelationInput = {
   teacherId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   teacher?: Prisma.TeachersOrderByWithRelationInput
@@ -239,7 +230,6 @@ export type TeacherCoursesWhereUniqueInput = Prisma.AtLeast<
     teacherId?: Prisma.StringFilter<'TeacherCourses'> | string
     courseId?: Prisma.StringFilter<'TeacherCourses'> | string
     assignedAt?: Prisma.DateTimeFilter<'TeacherCourses'> | Date | string
-    isActive?: Prisma.BoolFilter<'TeacherCourses'> | boolean
     createdAt?: Prisma.DateTimeFilter<'TeacherCourses'> | Date | string
     updatedAt?: Prisma.DateTimeFilter<'TeacherCourses'> | Date | string
     teacher?: Prisma.XOR<
@@ -259,7 +249,6 @@ export type TeacherCoursesOrderByWithAggregationInput = {
   teacherId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TeacherCoursesCountOrderByAggregateInput
@@ -282,7 +271,6 @@ export type TeacherCoursesScalarWhereWithAggregatesInput = {
     | Prisma.DateTimeWithAggregatesFilter<'TeacherCourses'>
     | Date
     | string
-  isActive?: Prisma.BoolWithAggregatesFilter<'TeacherCourses'> | boolean
   createdAt?:
     | Prisma.DateTimeWithAggregatesFilter<'TeacherCourses'>
     | Date
@@ -296,7 +284,6 @@ export type TeacherCoursesScalarWhereWithAggregatesInput = {
 export type TeacherCoursesCreateInput = {
   id?: string
   assignedAt?: Date | string
-  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.TeachersCreateNestedOneWithoutCourseLinksInput
@@ -308,7 +295,6 @@ export type TeacherCoursesUncheckedCreateInput = {
   teacherId: string
   courseId: string
   assignedAt?: Date | string
-  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -316,7 +302,6 @@ export type TeacherCoursesUncheckedCreateInput = {
 export type TeacherCoursesUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.TeachersUpdateOneRequiredWithoutCourseLinksNestedInput
@@ -328,7 +313,6 @@ export type TeacherCoursesUncheckedUpdateInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -338,7 +322,6 @@ export type TeacherCoursesCreateManyInput = {
   teacherId: string
   courseId: string
   assignedAt?: Date | string
-  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -346,7 +329,6 @@ export type TeacherCoursesCreateManyInput = {
 export type TeacherCoursesUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -356,7 +338,6 @@ export type TeacherCoursesUncheckedUpdateManyInput = {
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -381,7 +362,6 @@ export type TeacherCoursesCountOrderByAggregateInput = {
   teacherId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -391,7 +371,6 @@ export type TeacherCoursesMaxOrderByAggregateInput = {
   teacherId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -401,7 +380,6 @@ export type TeacherCoursesMinOrderByAggregateInput = {
   teacherId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   assignedAt?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -629,7 +607,6 @@ export type TeacherCoursesUncheckedUpdateManyWithoutTeacherNestedInput = {
 export type TeacherCoursesCreateWithoutCourseInput = {
   id?: string
   assignedAt?: Date | string
-  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   teacher: Prisma.TeachersCreateNestedOneWithoutCourseLinksInput
@@ -639,7 +616,6 @@ export type TeacherCoursesUncheckedCreateWithoutCourseInput = {
   id?: string
   teacherId: string
   assignedAt?: Date | string
-  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -699,7 +675,6 @@ export type TeacherCoursesScalarWhereInput = {
   teacherId?: Prisma.StringFilter<'TeacherCourses'> | string
   courseId?: Prisma.StringFilter<'TeacherCourses'> | string
   assignedAt?: Prisma.DateTimeFilter<'TeacherCourses'> | Date | string
-  isActive?: Prisma.BoolFilter<'TeacherCourses'> | boolean
   createdAt?: Prisma.DateTimeFilter<'TeacherCourses'> | Date | string
   updatedAt?: Prisma.DateTimeFilter<'TeacherCourses'> | Date | string
 }
@@ -707,7 +682,6 @@ export type TeacherCoursesScalarWhereInput = {
 export type TeacherCoursesCreateWithoutTeacherInput = {
   id?: string
   assignedAt?: Date | string
-  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   course: Prisma.CoursesCreateNestedOneWithoutTeacherLinksInput
@@ -717,7 +691,6 @@ export type TeacherCoursesUncheckedCreateWithoutTeacherInput = {
   id?: string
   courseId: string
   assignedAt?: Date | string
-  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -769,7 +742,6 @@ export type TeacherCoursesCreateManyCourseInput = {
   id?: string
   teacherId: string
   assignedAt?: Date | string
-  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -777,7 +749,6 @@ export type TeacherCoursesCreateManyCourseInput = {
 export type TeacherCoursesUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   teacher?: Prisma.TeachersUpdateOneRequiredWithoutCourseLinksNestedInput
@@ -787,7 +758,6 @@ export type TeacherCoursesUncheckedUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -796,7 +766,6 @@ export type TeacherCoursesUncheckedUpdateManyWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   teacherId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -805,7 +774,6 @@ export type TeacherCoursesCreateManyTeacherInput = {
   id?: string
   courseId: string
   assignedAt?: Date | string
-  isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -813,7 +781,6 @@ export type TeacherCoursesCreateManyTeacherInput = {
 export type TeacherCoursesUpdateWithoutTeacherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CoursesUpdateOneRequiredWithoutTeacherLinksNestedInput
@@ -823,7 +790,6 @@ export type TeacherCoursesUncheckedUpdateWithoutTeacherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -832,7 +798,6 @@ export type TeacherCoursesUncheckedUpdateManyWithoutTeacherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.StringFieldUpdateOperationsInput | string
   assignedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -846,7 +811,6 @@ export type TeacherCoursesSelect<
     teacherId?: boolean
     courseId?: boolean
     assignedAt?: boolean
-    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     teacher?: boolean | Prisma.TeachersDefaultArgs<ExtArgs>
@@ -864,7 +828,6 @@ export type TeacherCoursesSelectCreateManyAndReturn<
     teacherId?: boolean
     courseId?: boolean
     assignedAt?: boolean
-    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     teacher?: boolean | Prisma.TeachersDefaultArgs<ExtArgs>
@@ -882,7 +845,6 @@ export type TeacherCoursesSelectUpdateManyAndReturn<
     teacherId?: boolean
     courseId?: boolean
     assignedAt?: boolean
-    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     teacher?: boolean | Prisma.TeachersDefaultArgs<ExtArgs>
@@ -896,7 +858,6 @@ export type TeacherCoursesSelectScalar = {
   teacherId?: boolean
   courseId?: boolean
   assignedAt?: boolean
-  isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
@@ -905,13 +866,7 @@ export type TeacherCoursesOmit<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs
 > = runtime.Types.Extensions.GetOmit<
-  | 'id'
-  | 'teacherId'
-  | 'courseId'
-  | 'assignedAt'
-  | 'isActive'
-  | 'createdAt'
-  | 'updatedAt',
+  'id' | 'teacherId' | 'courseId' | 'assignedAt' | 'createdAt' | 'updatedAt',
   ExtArgs['result']['teacherCourses']
 >
 export type TeacherCoursesInclude<
@@ -951,7 +906,6 @@ export type $TeacherCoursesPayload<
       teacherId: string
       courseId: string
       assignedAt: Date
-      isActive: boolean
       createdAt: Date
       updatedAt: Date
     },
@@ -1587,7 +1541,6 @@ export interface TeacherCoursesFieldRefs {
   readonly teacherId: Prisma.FieldRef<'TeacherCourses', 'String'>
   readonly courseId: Prisma.FieldRef<'TeacherCourses', 'String'>
   readonly assignedAt: Prisma.FieldRef<'TeacherCourses', 'DateTime'>
-  readonly isActive: Prisma.FieldRef<'TeacherCourses', 'Boolean'>
   readonly createdAt: Prisma.FieldRef<'TeacherCourses', 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<'TeacherCourses', 'DateTime'>
 }
