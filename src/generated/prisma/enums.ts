@@ -9,7 +9,41 @@
 * 🟢 You can import this file directly.
 */
 
+export const CourseLevel = {
+  BEGINNER: 'BEGINNER',
+  INTERMEDIATE: 'INTERMEDIATE',
+  ADVANCED: 'ADVANCED',
+  EXPERT: 'EXPERT'
+} as const
+
+export type CourseLevel = (typeof CourseLevel)[keyof typeof CourseLevel]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+} as const
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
+export const ResultStatus = {
+  ENROLLED: 'ENROLLED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  WITHDRAWN: 'WITHDRAWN'
+} as const
+
+export type ResultStatus = (typeof ResultStatus)[keyof typeof ResultStatus]
+
+
+export const Role = {
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  ADMIN: 'ADMIN',
+  TEACHER: 'TEACHER',
+  STUDENT: 'STUDENT'
+} as const
+
+export type Role = (typeof Role)[keyof typeof Role]

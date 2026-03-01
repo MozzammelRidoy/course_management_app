@@ -29,8 +29,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more Courses
+ * const courses = await prisma.courses.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -40,7 +40,52 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
+ * Model Courses
+ * 
+ */
+export type Courses = Prisma.CoursesModel
+/**
+ * Model StudentsCourses
+ * 
+ */
+export type StudentsCourses = Prisma.StudentsCoursesModel
+/**
+ * Model TeacherCourses
+ * 
+ */
+export type TeacherCourses = Prisma.TeacherCoursesModel
+/**
+ * Model Institutes
+ * 
+ */
+export type Institutes = Prisma.InstitutesModel
+/**
+ * Model Profiles
+ * 
+ */
+export type Profiles = Prisma.ProfilesModel
+/**
+ * Model Results
+ * 
+ */
+export type Results = Prisma.ResultsModel
+/**
  * Model User
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model Students
+ * 
+ */
+export type Students = Prisma.StudentsModel
+/**
+ * Model Teachers
+ * 
+ */
+export type Teachers = Prisma.TeachersModel
+/**
+ * Model Users
+ * 
+ */
+export type Users = Prisma.UsersModel
