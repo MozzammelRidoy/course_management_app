@@ -1,12 +1,15 @@
-import { JwtPayload } from 'jsonwebtoken'
 import config from '../config'
 import AppError from '../errors/AppError'
-import { TUserRole } from '../interfaces/userRole_type'
 import catchAsync from '../utils/catchAsync'
 import { verifyToken } from '../utils/commonUtils'
+import { TJwtPayload } from '../interfaces/jwtToken_interface'
+import { Role } from '../../generated/prisma/enums'
+import { user_findByID_fromDB_or_Cache } from '../modules/users/users_service'
+import { UsersModel } from '../../generated/prisma/models'
+import { delete_cache_from_RAM } from '../utils/node_cache'
 
 // initiate authentication route auth function
-const auth = (...rolesAndFlags: Array<TUserRole | boolean>) => {
+const auth = (...rolesAndFlags: Array<Role | boolean>) => {
   // Check if the last argument is a boolean flag
   let isIgnoreAuthentication = false
   if (typeof rolesAndFlags[rolesAndFlags.length - 1] === 'boolean') {
@@ -14,7 +17,7 @@ const auth = (...rolesAndFlags: Array<TUserRole | boolean>) => {
   }
 
   // The remaining arguments are the required roles
-  const requiredRoles = rolesAndFlags as TUserRole[]
+  const requiredRoles = rolesAndFlags as Role[]
   return catchAsync(async (req, res, next) => {
     // Skip authentication if flag is set
     if (isIgnoreAuthentication) {
@@ -36,34 +39,29 @@ const auth = (...rolesAndFlags: Array<TUserRole | boolean>) => {
     const { user_id, role, iat } = decoded
 
     // Check if user exists (implementation depends on your user model)
-    // const user = await User.isUserStatusCheckFindBy_id(user_id);
-    // if (!user) {
-    //   throw new AppError(404, 'NOT_FOUND', 'User not found!');
-    // }
-    // Check if user is deleted
-    // if (user.isDeleted) {
-    //   throw new AppError(401, 'UNAUTHORIZED', 'This user has been deleted!');
-    // }
-    // Check if user is blocked
-    // if (user.status === 'blocked') {
-    //   throw new AppError(403, 'FORBIDDEN', 'This user is blocked!');
-    // }
+    const user: UsersModel = await user_findByID_fromDB_or_Cache(user_id)
+
     // Check if user role matches
-    // if (user.role !== role) {
-    //   throw new AppError(403, 'FORBIDDEN', 'Invalid user role!');
-    // }
+    if (user.role !== role) {
+      throw new AppError(403, 'FORBIDDEN', 'Invalid user role!')
+    }
     // Check if password was changed after token was issued
-    // if (user.passwordChangedAt) {
-    //   const isPasswordChanged = User.isJWTIssuedAtBeforePasswordChanged(
-    //     user.passwordChangedAt,
-    //     iat as number
-    //   );
-    //   if (isPasswordChanged) {
-    //     // Clear cache if needed
-    //     // delete_cache_from_RAM(user._id?.toString() as string);
-    //     throw new AppError(401, 'UNAUTHORIZED', 'Password has been changed. Please login again.');
-    //   }
-    // }
+    if (user.passwordChangedAt) {
+      const passwordChangedTime =
+        new Date(user.passwordChangedAt).getTime() / 1000
+      const passwordChangedTimeInt = parseInt(passwordChangedTime.toString())
+
+      const isPasswordChanged = passwordChangedTimeInt > iat!
+      if (isPasswordChanged) {
+        // Clear cache if needed
+        delete_cache_from_RAM(user_id)
+        throw new AppError(
+          401,
+          'UNAUTHORIZED',
+          'Password has been changed. Please login again.'
+        )
+      }
+    }
 
     // Check if user has required role
     if (requiredRoles.length > 0 && !requiredRoles.includes(role)) {
@@ -74,7 +72,7 @@ const auth = (...rolesAndFlags: Array<TUserRole | boolean>) => {
       )
     }
     // Attach user to request object
-    req.user = decoded as JwtPayload
+    req.user = decoded as TJwtPayload
     next()
   })
 }
