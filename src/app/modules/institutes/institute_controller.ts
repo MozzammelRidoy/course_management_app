@@ -24,12 +24,28 @@ const get_All_institutes_forAdmin = catchAsync(async (req, res) => {
     status: 200,
     success: true,
     message: 'All institutes fetched successfully',
-    data: result.data,
+    data: result.result,
+    meta: result.meta
+  })
+})
+
+// fetch all institutes for global
+const get_All_institutes_forGlobal = catchAsync(async (req, res) => {
+  const result = await InstituteServices.fetch_all_institutes_forGlobal_fromDB(
+    req.query
+  )
+
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: 'All institutes fetched successfully',
+    data: result.result,
     meta: result.meta
   })
 })
 
 export const InstituteController = {
   create_institute,
-  get_All_institutes_forAdmin
+  get_All_institutes_forAdmin,
+  get_All_institutes_forGlobal
 }

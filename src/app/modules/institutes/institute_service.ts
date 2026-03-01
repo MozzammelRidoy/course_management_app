@@ -81,12 +81,35 @@ const fetch_all_institutes_forAdmin_fromDB = async (
   const meta = await instituteQuery.countTotal()
 
   return {
-    data: result,
+    result,
     meta
   }
 }
 
+// fetch all institutes from database for All global
+
+const fetch_all_institutes_forGlobal_fromDB = async (
+  query: Record<string, unknown>
+) => {
+  const instituteQuery = new PrismaQueryBuilder(prisma.institutes, query)
+    .setBaseQuery({ isDeleted: false, isActive: true })
+    .setSecretFields(['isDeleted', 'isActive'])
+    .search(['name', 'code'])
+    .fields()
+    .filter()
+    .sort()
+    .paginate()
+
+  const result = await instituteQuery.execute()
+  const meta = await instituteQuery.countTotal()
+
+  return {
+    result,
+    meta
+  }
+}
 export const InstituteServices = {
   create_institute_intoDB,
-  fetch_all_institutes_forAdmin_fromDB
+  fetch_all_institutes_forAdmin_fromDB,
+  fetch_all_institutes_forGlobal_fromDB
 }
