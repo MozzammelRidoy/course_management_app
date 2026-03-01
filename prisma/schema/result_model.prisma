@@ -1,0 +1,60 @@
+
+
+
+enum ResultStatus {
+  ENROLLED       
+  IN_PROGRESS    
+  COMPLETED      
+  FAILED         
+  WITHDRAWN      
+}
+
+// Results Model Definitions
+model Results {
+  id           String       @id @default(uuid())
+  studentId    String
+  courseId     String
+  teacherId    String?      
+  
+  // Grade Information
+  score        Float        // 0-100
+  grade        String?      // Letter grade: A, B, C, D, F
+  status       ResultStatus @default(ENROLLED)
+  
+  // Academic Period
+  semester     String?      // e.g., "Fall", "Spring", "Summer"
+  academicYear String?      // e.g., "2024-2025"
+  
+  // Timestamps
+  enrolledAt   DateTime     @default(now())
+  completedAt  DateTime?
+  feedback     String?      // Teacher feedback
+
+ 
+  
+  // Many-to-One: Result belongs to ONE Student
+  student      Students     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  
+  // Many-to-One: Result belongs to ONE Course
+  course       Courses      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  
+  // Many-to-One: Result graded by ONE Teacher (optional)
+  teacher      Teachers?    @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+
+  // Timestamps
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Indexes & Constraints
+  @@unique([studentId, courseId, academicYear, semester]) // One result per student per course per semester
+  @@index([studentId])       // FK - student's results
+  @@index([courseId])        // FK - course results
+  @@index([teacherId])       // FK - teacher's graded results
+  @@index([score])           // Ranking queries
+  @@index([status])          // Filter by status
+  @@index([academicYear])    // Filter by year
+  @@index([semester])        // Filter by semester
+  @@index([studentId, courseId])  // Composite: lookup specific enrollment
+  @@index([score, academicYear])  // Composite: ranking per year
+  @@map("results")
+}
