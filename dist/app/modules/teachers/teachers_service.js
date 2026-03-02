@@ -29,54 +29,7 @@ const PrismaQueryBuilder_1 = __importDefault(require("../../builder/PrismaQueryB
 const prisma_1 = require("../../shared/prisma");
 // get my all Assigned courses from db by Student
 const fetch_my_Assigned_Courses_byTeacher_fromDB = (user, query) => __awaiter(void 0, void 0, void 0, function* () {
-    const { search, status } = query, rest = __rest(query
-    //   const cData = await prisma.teacherCourses.findMany({
-    //     where: {
-    //       teacher: {
-    //         userId: user.user_id
-    //       }
-    //     },
-    //     include: {
-    //       course: {
-    //         select: {
-    //           name: true,
-    //           description: true,
-    //           category: true,
-    //           level: true,
-    //           credits: true,
-    //           duration: true,
-    //           code: true,
-    //           startDate: true,
-    //           endDate: true,
-    //           status: true
-    //         }
-    //       }
-    //     }
-    //   })
-    , ["search", "status"]);
-    //   const cData = await prisma.teacherCourses.findMany({
-    //     where: {
-    //       teacher: {
-    //         userId: user.user_id
-    //       }
-    //     },
-    //     include: {
-    //       course: {
-    //         select: {
-    //           name: true,
-    //           description: true,
-    //           category: true,
-    //           level: true,
-    //           credits: true,
-    //           duration: true,
-    //           code: true,
-    //           startDate: true,
-    //           endDate: true,
-    //           status: true
-    //         }
-    //       }
-    //     }
-    //   })
+    const { search, status } = query, rest = __rest(query, ["search", "status"]);
     const whereCondition = {
         teacher: {
             userId: user.user_id
@@ -129,6 +82,90 @@ const fetch_my_Assigned_Courses_byTeacher_fromDB = (user, query) => __awaiter(vo
     const meta = yield coursesQuery.countTotal();
     return { data, meta };
 });
+// fetch all students under the course by teacher
+const fetch_courseStudents_byTeacher_fromDB = (user, courseId, query) => __awaiter(void 0, void 0, void 0, function* () {
+    const { search, studentId } = query;
+    const whereCondition = {
+        courseId,
+        // Teacher security
+        course: {
+            teacherLinks: {
+                some: {
+                    teacher: {
+                        userId: user.user_id
+                    }
+                }
+            }
+        }
+    };
+    // Filter by studentId
+    if (studentId) {
+        whereCondition.studentId = String(studentId);
+    }
+    // Global search (name OR email)
+    if (search) {
+        whereCondition.student = {
+            user: {
+                OR: [
+                    {
+                        email: {
+                            contains: String(search),
+                            mode: 'insensitive'
+                        }
+                    },
+                    {
+                        phone: {
+                            contains: String(search),
+                            mode: 'insensitive'
+                        }
+                    },
+                    {
+                        profile: {
+                            name: {
+                                contains: String(search),
+                                mode: 'insensitive'
+                            }
+                        }
+                    }
+                ]
+            }
+        };
+    }
+    const studentQuery = new PrismaQueryBuilder_1.default(prisma_1.prisma.studentsCourses, {})
+        .setBaseQuery(Object.assign({}, whereCondition))
+        .setSecretFields(['studentId', 'courseId', 'createdAt', 'updatedAt'])
+        .include({
+        student: {
+            select: {
+                id: true,
+                user: {
+                    select: {
+                        email: true,
+                        phone: true,
+                        profile: {
+                            select: { name: true }
+                        }
+                    }
+                }
+            }
+        }
+    });
+    const data = yield studentQuery.execute();
+    const meta = yield studentQuery.countTotal();
+    const formatted = data.map(item => {
+        var _a;
+        return ({
+            studentId: item.student.id,
+            email: item.student.user.email,
+            phone: item.student.user.phone,
+            name: (_a = item.student.user.profile) === null || _a === void 0 ? void 0 : _a.name,
+            enrolledAt: item.enrolledAt,
+            enrollmentStatus: item.status
+        });
+    });
+    return { data: formatted, meta };
+});
 exports.TeacherServices = {
-    fetch_my_Assigned_Courses_byTeacher_fromDB
+    fetch_my_Assigned_Courses_byTeacher_fromDB,
+    fetch_courseStudents_byTeacher_fromDB
 };

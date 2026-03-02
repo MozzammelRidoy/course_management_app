@@ -27,6 +27,18 @@ const get_all_assigned_Courses_byTeacher = (0, catchAsync_1.default)((req, res) 
         meta: result.meta
     });
 }));
+// fetch students under the course by teacher.
+const get_courseStudents_byTeacher = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield teachers_service_1.TeacherServices.fetch_courseStudents_byTeacher_fromDB(req.user, req.params.courseId, req.query);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'Fetched all students under the course by teacher',
+        data: result.data,
+        meta: result.meta
+    });
+}));
 exports.TeacherControllers = {
-    get_all_assigned_Courses_byTeacher
+    get_all_assigned_Courses_byTeacher,
+    get_courseStudents_byTeacher
 };
