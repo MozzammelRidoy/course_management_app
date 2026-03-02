@@ -26,7 +26,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TeacherServices = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const PrismaQueryBuilder_1 = __importDefault(require("../../builder/PrismaQueryBuilder"));
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const prisma_1 = require("../../shared/prisma");
+const date_Time_Validation_1 = require("../../utils/date_Time_Validation");
 // get my all Assigned courses from db by Student
 const fetch_my_Assigned_Courses_byTeacher_fromDB = (user, query) => __awaiter(void 0, void 0, void 0, function* () {
     const { search, status } = query, rest = __rest(query, ["search", "status"]);
@@ -102,7 +104,7 @@ const fetch_courseStudents_byTeacher_fromDB = (user, courseId, query) => __await
     if (studentId) {
         whereCondition.studentId = String(studentId);
     }
-    // Global search (name OR email)
+    // Global search (name OR email OR phone)
     if (search) {
         whereCondition.student = {
             user: {
@@ -133,7 +135,7 @@ const fetch_courseStudents_byTeacher_fromDB = (user, courseId, query) => __await
     }
     const studentQuery = new PrismaQueryBuilder_1.default(prisma_1.prisma.studentsCourses, {})
         .setBaseQuery(Object.assign({}, whereCondition))
-        .setSecretFields(['studentId', 'courseId', 'createdAt', 'updatedAt'])
+        .setSecretFields(['studentId', 'createdAt', 'updatedAt'])
         .include({
         student: {
             select: {
@@ -155,6 +157,7 @@ const fetch_courseStudents_byTeacher_fromDB = (user, courseId, query) => __await
     const formatted = data.map(item => {
         var _a;
         return ({
+            courseId: item.courseId,
             studentId: item.student.id,
             email: item.student.user.email,
             phone: item.student.user.phone,
@@ -165,7 +168,125 @@ const fetch_courseStudents_byTeacher_fromDB = (user, courseId, query) => __await
     });
     return { data: formatted, meta };
 });
+const calculateGrade = (marks) => {
+    if (marks >= 80)
+        return 'A+';
+    if (marks >= 75)
+        return 'A';
+    if (marks >= 70)
+        return 'A-';
+    if (marks >= 65)
+        return 'B+';
+    if (marks >= 60)
+        return 'B';
+    if (marks >= 55)
+        return 'B-';
+    if (marks >= 50)
+        return 'C+';
+    if (marks >= 45)
+        return 'C';
+    if (marks >= 40)
+        return 'D';
+    return 'F';
+};
+// update student result byTeacher into DB
+const update_student_result_byTeacher_intoDB = (user, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const { courseId, studentId, result, feedback, status, academicYear, semester: sem, completedAt } = payload;
+    const semester = sem.toLowerCase();
+    // Verify teacher assigned + student enrolled
+    const assignedCourse = yield prisma_1.prisma.studentsCourses.findFirst({
+        where: {
+            courseId,
+            studentId,
+            course: {
+                teacherLinks: {
+                    some: {
+                        teacher: {
+                            userId: user.user_id
+                        }
+                    }
+                }
+            }
+        },
+        select: {
+            id: true,
+            studentId: true,
+            courseId: true,
+            course: {
+                select: {
+                    teacherLinks: {
+                        where: {
+                            teacher: {
+                                userId: user.user_id
+                            }
+                        },
+                        select: {
+                            teacherId: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+    if (!assignedCourse) {
+        throw new AppError_1.default(404, 'course', 'This course is not found or not assigned to you or this student');
+    }
+    const teacherId = (_a = assignedCourse.course.teacherLinks[0]) === null || _a === void 0 ? void 0 : _a.teacherId;
+    if (!teacherId) {
+        throw new AppError_1.default(403, 'teacher', 'Unauthorized');
+    }
+    const grade = calculateGrade(result);
+    const { start: completedTime } = (0, date_Time_Validation_1.Start_End_DateTime_Validation)(completedAt, completedAt);
+    // Transaction (atomic operation)
+    yield prisma_1.prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+        // Create result (or use upsert if needed)
+        yield tx.results.upsert({
+            where: {
+                studentId_courseId_academicYear_semester: {
+                    studentId,
+                    courseId,
+                    academicYear,
+                    semester
+                }
+            },
+            update: {
+                grade,
+                score: result,
+                teacherId,
+                completedAt: completedTime,
+                feedback,
+                status
+            },
+            create: {
+                studentId,
+                courseId,
+                teacherId,
+                grade,
+                score: result,
+                completedAt: completedTime,
+                academicYear,
+                semester,
+                feedback,
+                status
+            }
+        });
+        // Update enrollment status
+        yield tx.studentsCourses.update({
+            where: {
+                id: assignedCourse.id
+            },
+            data: {
+                status
+            }
+        });
+    }));
+    return {
+        message: `Student Result Updated Successfully. The Grade is : ${grade}`
+    };
+});
 exports.TeacherServices = {
     fetch_my_Assigned_Courses_byTeacher_fromDB,
-    fetch_courseStudents_byTeacher_fromDB
+    fetch_courseStudents_byTeacher_fromDB,
+    update_student_result_byTeacher_intoDB
 };

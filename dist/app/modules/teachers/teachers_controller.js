@@ -38,7 +38,18 @@ const get_courseStudents_byTeacher = (0, catchAsync_1.default)((req, res) => __a
         meta: result.meta
     });
 }));
+// update student result by teacher
+const update_student_result_byTeacher = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield teachers_service_1.TeacherServices.update_student_result_byTeacher_intoDB(req.user, req.body);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'Student Result Updated Successfully',
+        data: result
+    });
+}));
 exports.TeacherControllers = {
     get_all_assigned_Courses_byTeacher,
-    get_courseStudents_byTeacher
+    get_courseStudents_byTeacher,
+    update_student_result_byTeacher
 };
