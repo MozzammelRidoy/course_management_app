@@ -1,6 +1,10 @@
 import { z } from 'zod'
 import { CourseLevelValues, CourseStatusValues } from './course_constant'
 
+const AllowedCourseStatus = CourseStatusValues.filter(
+  status => status !== 'ENDED'
+) as [string, ...string[]]
+
 // Create Course Validation Schema
 const create_course_ValidationZodScheam = z.object({
   body: z.object({
@@ -31,20 +35,16 @@ const create_course_ValidationZodScheam = z.object({
     category: z
       .string({ required_error: 'Category is required' })
       .min(3, { message: 'Category must be at least 3 characters long' })
-      .max(120, { message: 'Category Must be at most 120 characters long' })
-      .optional(),
-    level: z
-      .enum([...(CourseLevelValues as [string, ...string[]])], {
-        required_error: 'Level is required'
-      })
-      .optional(),
+      .max(120, { message: 'Category Must be at most 120 characters long' }),
+    level: z.enum([...(CourseLevelValues as [string, ...string[]])], {
+      required_error: 'Level is required'
+    }),
     startDate: z
       .string({ required_error: 'Start Date is required' })
       .refine(
         val => !isNaN(Date.parse(val)),
         'Start Date date must be a valid date string'
-      )
-      .optional(),
+      ),
     endDate: z
       .string({ required_error: 'End Date is required' })
       .refine(
@@ -52,11 +52,9 @@ const create_course_ValidationZodScheam = z.object({
         'End Date date must be a valid date string'
       )
       .optional(),
-    status: z
-      .enum([...(CourseStatusValues as [string, ...string[]])], {
-        required_error: 'Course Status is required'
-      })
-      .optional(),
+    status: z.enum(AllowedCourseStatus, {
+      required_error: 'Course Status is required'
+    }),
     isAvailable: z.boolean({
       required_error: 'Course Availability is required'
     })

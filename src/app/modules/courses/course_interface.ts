@@ -8,9 +8,10 @@ export type TCoursePayload = {
   credits: number
   duration: number
   category: string
-  level?: CourseLevel
+  level: CourseLevel
   startDate: Date
   endDate: Date
-  status?: CourseStatus
-  isAvailable?: boolean
+  status: CourseStatus
+  isAvailable: boolean
+  isDeleted?: boolean
 }
