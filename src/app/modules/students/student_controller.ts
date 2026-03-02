@@ -18,6 +18,22 @@ const get_my_courses_byStudent = catchAsync(async (req, res) => {
   })
 })
 
+// get my all result by Student
+const get_myResult_byStudent = catchAsync(async (req, res) => {
+  const result = await StudentServices.fetch_myResults_byStudent_fromDB(
+    req.user,
+    req.query
+  )
+
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: 'Retrived All Results',
+    data: result.data,
+    meta: result.meta
+  })
+})
 export const StudentControllers = {
-  get_my_courses_byStudent
+  get_my_courses_byStudent,
+  get_myResult_byStudent
 }

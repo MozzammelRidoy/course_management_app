@@ -11,4 +11,11 @@ router.get(
   StudentControllers.get_my_courses_byStudent
 )
 
+// fetch my result by Student
+router.get(
+  '/my-results',
+  auth('STUDENT'),
+  StudentControllers.get_myResult_byStudent
+)
+
 export const StudentRoutes = router
