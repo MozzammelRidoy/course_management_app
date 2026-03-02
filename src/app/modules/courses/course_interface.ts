@@ -15,3 +15,7 @@ export type TCoursePayload = {
   isAvailable: boolean
   isDeleted?: boolean
 }
+
+export type TCourseEnrollmentPayload = {
+  courserId: string
+}

@@ -44,8 +44,25 @@ const get_Courses_byStudent = catchAsync(async (req, res) => {
     meta: result.meta
   })
 })
+
+// course enrollment by stuent.
+const create_enrollment_course_byStudent = catchAsync(async (req, res) => {
+  const result = await CourseServices.enroll_course_byStudent_intoDB(
+    req.user,
+    req.body
+  )
+
+  sendResponse(res, {
+    status: 201,
+    success: true,
+    message: 'Course Enrolled Successfully',
+    data: result
+  })
+})
+
 export const CourseControllers = {
   create_Course_byAdmin,
   get_Courses_byAdmin,
-  get_Courses_byStudent
+  get_Courses_byStudent,
+  create_enrollment_course_byStudent
 }

@@ -5,7 +5,7 @@ import AppError from '../../errors/AppError'
 import { TJwtPayload } from '../../interfaces/jwtToken_interface'
 import { prisma } from '../../shared/prisma'
 import { Start_End_DateTime_Validation } from '../../utils/date_Time_Validation'
-import { TCoursePayload } from './course_interface'
+import { TCourseEnrollmentPayload, TCoursePayload } from './course_interface'
 
 // course create by admin
 const create_course_byAdmin_intoDB = async (payload: TCoursePayload) => {
@@ -164,8 +164,73 @@ const fetch_all_courses_byStudent_fromDB = async (
 
   return { data, meta }
 }
+
+// course enrollment by student.
+const enroll_course_byStudent_intoDB = async (
+  user: TJwtPayload,
+  payload: TCourseEnrollmentPayload
+) => {
+  // check course is available or not.
+  const courseData = await prisma.courses.findFirst({
+    where: {
+      id: payload.courserId,
+      isAvailable: true,
+      isDeleted: false,
+      status: { in: [CourseStatus.PENDING, CourseStatus.ONGOING] },
+      // Courses based on Institute
+      institute: {
+        students: {
+          some: { userId: user.user_id }
+        }
+      },
+      // avoid already enrolled courses
+      studentLinks: {
+        none: {
+          student: {
+            userId: user.user_id
+          }
+        }
+      }
+    },
+    select: {
+      id: true,
+      institute: {
+        select: {
+          students: {
+            where: {
+              userId: user.user_id
+            },
+            select: {
+              id: true
+            }
+          }
+        }
+      }
+    }
+  })
+
+  if (!courseData || !courseData.id) {
+    throw new AppError(
+      404,
+      'courseId',
+      'This course is not available or Not Found!'
+    )
+  }
+  const studentId = courseData.institute.students[0]?.id
+
+  await prisma.studentsCourses.create({
+    data: {
+      studentId,
+      courseId: courseData.id
+    }
+  })
+
+  return { message: 'Course Enrolled Successfully' }
+}
+
 export const CourseServices = {
   create_course_byAdmin_intoDB,
   fetch_all_courses_byAdmin_fromDB,
-  fetch_all_courses_byStudent_fromDB
+  fetch_all_courses_byStudent_fromDB,
+  enroll_course_byStudent_intoDB
 }

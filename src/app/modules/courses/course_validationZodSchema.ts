@@ -61,4 +61,12 @@ const create_course_ValidationZodScheam = z.object({
   })
 })
 
-export const courseValidations = { create_course_ValidationZodScheam }
+// course enrollment by student validation schema
+const create_course_enrollment_ValidationZodSchema = z.object({
+  body: z.object({})
+})
+
+export const courseValidations = {
+  create_course_ValidationZodScheam,
+  create_course_enrollment_ValidationZodSchema
+}
