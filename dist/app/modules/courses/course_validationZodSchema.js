@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.courseValidations = void 0;
 const zod_1 = require("zod");
 const course_constant_1 = require("./course_constant");
+const AllowedCourseStatus = course_constant_1.CourseStatusValues.filter(status => status !== 'ENDED');
 // Create Course Validation Schema
 const create_course_ValidationZodScheam = zod_1.z.object({
     body: zod_1.z.object({
@@ -33,29 +34,30 @@ const create_course_ValidationZodScheam = zod_1.z.object({
         category: zod_1.z
             .string({ required_error: 'Category is required' })
             .min(3, { message: 'Category must be at least 3 characters long' })
-            .max(120, { message: 'Category Must be at most 120 characters long' })
-            .optional(),
-        level: zod_1.z
-            .enum([...course_constant_1.CourseLevelValues], {
+            .max(120, { message: 'Category Must be at most 120 characters long' }),
+        level: zod_1.z.enum([...course_constant_1.CourseLevelValues], {
             required_error: 'Level is required'
-        })
-            .optional(),
+        }),
         startDate: zod_1.z
             .string({ required_error: 'Start Date is required' })
-            .refine(val => !isNaN(Date.parse(val)), 'Start Date date must be a valid date string')
-            .optional(),
+            .refine(val => !isNaN(Date.parse(val)), 'Start Date date must be a valid date string'),
         endDate: zod_1.z
             .string({ required_error: 'End Date is required' })
             .refine(val => !isNaN(Date.parse(val)), 'End Date date must be a valid date string')
             .optional(),
-        status: zod_1.z
-            .enum([...course_constant_1.CourseStatusValues], {
+        status: zod_1.z.enum(AllowedCourseStatus, {
             required_error: 'Course Status is required'
-        })
-            .optional(),
+        }),
         isAvailable: zod_1.z.boolean({
             required_error: 'Course Availability is required'
         })
     })
 });
-exports.courseValidations = { create_course_ValidationZodScheam };
+// course enrollment by student validation schema
+const create_course_enrollment_ValidationZodSchema = zod_1.z.object({
+    body: zod_1.z.object({})
+});
+exports.courseValidations = {
+    create_course_ValidationZodScheam,
+    create_course_enrollment_ValidationZodSchema
+};

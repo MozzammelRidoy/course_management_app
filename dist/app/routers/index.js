@@ -8,6 +8,7 @@ const auth_route_1 = require("../modules/auth/auth_route");
 const institute_route_1 = require("../modules/institutes/institute_route");
 const admin_route_1 = require("../modules/admin/admin_route");
 const users_route_1 = require("../modules/users/users_route");
+const course_route_1 = require("../modules/courses/course_route");
 /**
  * Main router configuration
  * This file serves as the central point for registering all module routes
@@ -31,6 +32,10 @@ const moduleRoutes = [
     {
         path: '/institutes',
         route: institute_route_1.InstituteRoutes
+    },
+    {
+        path: '/courses',
+        route: course_route_1.CourseRoutes
     },
     {
         path: '/admin',

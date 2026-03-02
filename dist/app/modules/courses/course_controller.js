@@ -26,6 +26,41 @@ const create_Course_byAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(
         data: result
     });
 }));
+// fetch all courses by admin
+const get_Courses_byAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield course_service_1.CourseServices.fetch_all_courses_byAdmin_fromDB(req.query);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'Courses Fetched Successfully',
+        data: result.data,
+        meta: result.meta
+    });
+}));
+// fetch all courses by admin
+const get_Courses_byStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield course_service_1.CourseServices.fetch_all_courses_byStudent_fromDB(req.user, req.query);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'Courses Fetched Successfully',
+        data: result.data,
+        meta: result.meta
+    });
+}));
+// course enrollment by stuent.
+const create_enrollment_course_byStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield course_service_1.CourseServices.enroll_course_byStudent_intoDB(req.user, req.body);
+    (0, sendResponse_1.default)(res, {
+        status: 201,
+        success: true,
+        message: 'Course Enrolled Successfully',
+        data: result
+    });
+}));
 exports.CourseControllers = {
-    create_Course_byAdmin
+    create_Course_byAdmin,
+    get_Courses_byAdmin,
+    get_Courses_byStudent,
+    create_enrollment_course_byStudent
 };

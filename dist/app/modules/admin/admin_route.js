@@ -23,6 +23,8 @@ router.post('/institute-create', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0
 // create teacher profile by admin.
 router.post('/teacher-create', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0, validateRequest_1.default)(users_validationZodSchema_1.UserValidations.create_teacher_profile_by_admin_ValidationZodSchema), users_controller_1.UserController.create_teacher_profile_byAdmin);
 // ===============Course=======================
+// fetch course by admin.
+router.get('/courses', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), course_controller_1.CourseControllers.get_Courses_byAdmin);
 // create course by admin.
 router.post('/course-create', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0, validateRequest_1.default)(course_validationZodSchema_1.courseValidations.create_course_ValidationZodScheam), course_controller_1.CourseControllers.create_Course_byAdmin);
 exports.AdminRoutes = router;
