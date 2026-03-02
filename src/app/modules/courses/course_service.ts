@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Prisma } from '../../../generated/prisma/client'
+import PrismaQueryBuilder from '../../builder/PrismaQueryBuilder'
 import AppError from '../../errors/AppError'
 import { prisma } from '../../shared/prisma'
 import { Start_End_DateTime_Validation } from '../../utils/date_Time_Validation'
@@ -75,6 +76,42 @@ const create_course_byAdmin_intoDB = async (payload: TCoursePayload) => {
   }
 }
 
+// fetch all courses for admin
+const fetch_all_courses_byAdmin_fromDB = async (
+  query: Record<string, unknown>
+) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isDeleted, ...rest } = query
+  if (rest.isAvailable)
+    rest.isAvailable = rest.isAvailable === 'true' ? true : false
+  if (rest.credit) rest.credit = Number(rest.credit)
+  if (rest.duration) rest.duration = Number(rest.duration)
+
+  // build query
+  const courseQuery = new PrismaQueryBuilder(prisma.courses, rest)
+    .setBaseQuery({ isDeleted: false })
+    .setSecretFields(['isDeleted'])
+    .search(['code', 'name'])
+    .filter()
+    .fields()
+    .sort()
+    .paginate()
+    .include({
+      institute: {
+        select: {
+          name: true,
+          code: true
+        }
+      }
+    })
+
+  const data = await courseQuery.execute()
+  const meta = await courseQuery.countTotal()
+
+  return { data, meta }
+}
+
 export const CourseServices = {
-  create_course_byAdmin_intoDB
+  create_course_byAdmin_intoDB,
+  fetch_all_courses_byAdmin_fromDB
 }

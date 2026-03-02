@@ -37,6 +37,12 @@ router.post(
 )
 
 // ===============Course=======================
+// fetch course by admin.
+router.get(
+  '/courses',
+  auth('SUPER_ADMIN', 'ADMIN'),
+  CourseControllers.get_Courses_byAdmin
+)
 // create course by admin.
 router.post(
   '/course-create',

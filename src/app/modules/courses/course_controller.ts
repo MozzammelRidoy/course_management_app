@@ -14,6 +14,21 @@ const create_Course_byAdmin = catchAsync(async (req, res) => {
   })
 })
 
+// fetch all courses by admin
+const get_Courses_byAdmin = catchAsync(async (req, res) => {
+  const result = await CourseServices.fetch_all_courses_byAdmin_fromDB(
+    req.query
+  )
+
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: 'Courses Fetched Successfully',
+    data: result.data,
+    meta: result.meta
+  })
+})
 export const CourseControllers = {
-  create_Course_byAdmin
+  create_Course_byAdmin,
+  get_Courses_byAdmin
 }
