@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Prisma } from '../../../generated/prisma/client'
+import { CourseStatus, Prisma } from '../../../generated/prisma/client'
 import PrismaQueryBuilder from '../../builder/PrismaQueryBuilder'
 import AppError from '../../errors/AppError'
+import { TJwtPayload } from '../../interfaces/jwtToken_interface'
 import { prisma } from '../../shared/prisma'
 import { Start_End_DateTime_Validation } from '../../utils/date_Time_Validation'
 import { TCoursePayload } from './course_interface'
@@ -111,7 +112,60 @@ const fetch_all_courses_byAdmin_fromDB = async (
   return { data, meta }
 }
 
+// fetch all courses for students
+const fetch_all_courses_byStudent_fromDB = async (
+  user: TJwtPayload,
+  query: Record<string, unknown>
+) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { isDeleted, isAvailable, ...rest } = query
+
+  if (rest.credit) rest.credit = Number(rest.credit)
+  if (rest.duration) rest.duration = Number(rest.duration)
+
+  // build query
+  const courseQuery = new PrismaQueryBuilder(prisma.courses, rest)
+    .setBaseQuery({
+      isAvailable: true,
+      isDeleted: false,
+      status: { in: [CourseStatus.PENDING, CourseStatus.ONGOING] },
+      // Courses based on Institute
+      institute: {
+        students: {
+          some: { userId: user.user_id }
+        }
+      },
+      // avoid already enrolled courses
+      studentLinks: {
+        none: {
+          student: {
+            userId: user.user_id
+          }
+        }
+      }
+    })
+    .setSecretFields(['isDeleted', 'isAvailable', 'instituteId'])
+    .search(['code', 'name'])
+    .filter()
+    .fields()
+    .sort()
+    .paginate()
+    .include({
+      institute: {
+        select: {
+          name: true,
+          code: true
+        }
+      }
+    })
+
+  const data = await courseQuery.execute()
+  const meta = await courseQuery.countTotal()
+
+  return { data, meta }
+}
 export const CourseServices = {
   create_course_byAdmin_intoDB,
-  fetch_all_courses_byAdmin_fromDB
+  fetch_all_courses_byAdmin_fromDB,
+  fetch_all_courses_byStudent_fromDB
 }
