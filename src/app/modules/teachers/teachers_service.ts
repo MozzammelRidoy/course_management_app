@@ -10,30 +10,6 @@ const fetch_my_Assigned_Courses_byTeacher_fromDB = async (
 ) => {
   const { search, status, ...rest } = query
 
-  //   const cData = await prisma.teacherCourses.findMany({
-  //     where: {
-  //       teacher: {
-  //         userId: user.user_id
-  //       }
-  //     },
-  //     include: {
-  //       course: {
-  //         select: {
-  //           name: true,
-  //           description: true,
-  //           category: true,
-  //           level: true,
-  //           credits: true,
-  //           duration: true,
-  //           code: true,
-  //           startDate: true,
-  //           endDate: true,
-  //           status: true
-  //         }
-  //       }
-  //     }
-  //   })
-
   const whereCondition: any = {
     teacher: {
       userId: user.user_id
@@ -97,6 +73,101 @@ const fetch_my_Assigned_Courses_byTeacher_fromDB = async (
   return { data, meta }
 }
 
+// fetch all students under the course by teacher
+const fetch_courseStudents_byTeacher_fromDB = async (
+  user: TJwtPayload,
+  courseId: string,
+  query: Record<string, unknown>
+) => {
+  const { search, studentId } = query
+
+  const whereCondition: any = {
+    courseId,
+
+    // Teacher security
+    course: {
+      teacherLinks: {
+        some: {
+          teacher: {
+            userId: user.user_id
+          }
+        }
+      }
+    }
+  }
+
+  // Filter by studentId
+  if (studentId) {
+    whereCondition.studentId = String(studentId)
+  }
+
+  // Global search (name OR email)
+  if (search) {
+    whereCondition.student = {
+      user: {
+        OR: [
+          {
+            email: {
+              contains: String(search),
+              mode: 'insensitive'
+            }
+          },
+          {
+            phone: {
+              contains: String(search),
+              mode: 'insensitive'
+            }
+          },
+          {
+            profile: {
+              name: {
+                contains: String(search),
+                mode: 'insensitive'
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+
+  const studentQuery = new PrismaQueryBuilder(prisma.studentsCourses, {})
+    .setBaseQuery({
+      ...whereCondition
+    })
+    .setSecretFields(['studentId', 'courseId', 'createdAt', 'updatedAt'])
+    .include({
+      student: {
+        select: {
+          id: true,
+          user: {
+            select: {
+              email: true,
+              phone: true,
+              profile: {
+                select: { name: true }
+              }
+            }
+          }
+        }
+      }
+    })
+  const data = await studentQuery.execute()
+  const meta = await studentQuery.countTotal()
+
+  const formatted = data.map(item => ({
+    studentId: item.student.id,
+    email: item.student.user.email,
+    phone: item.student.user.phone,
+    name: item.student.user.profile?.name,
+    enrolledAt: item.enrolledAt,
+    enrollmentStatus: item.status
+  }))
+
+  return { data: formatted, meta }
+}
+
 export const TeacherServices = {
-  fetch_my_Assigned_Courses_byTeacher_fromDB
+  fetch_my_Assigned_Courses_byTeacher_fromDB,
+  fetch_courseStudents_byTeacher_fromDB
 }
