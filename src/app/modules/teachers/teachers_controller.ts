@@ -35,7 +35,23 @@ const get_courseStudents_byTeacher = catchAsync(async (req, res) => {
     meta: result.meta
   })
 })
+
+// update student result by teacher
+const update_student_result_byTeacher = catchAsync(async (req, res) => {
+  const result = await TeacherServices.update_student_result_byTeacher_intoDB(
+    req.user,
+    req.body
+  )
+
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: 'Student Result Updated Successfully',
+    data: result
+  })
+})
 export const TeacherControllers = {
   get_all_assigned_Courses_byTeacher,
-  get_courseStudents_byTeacher
+  get_courseStudents_byTeacher,
+  update_student_result_byTeacher
 }

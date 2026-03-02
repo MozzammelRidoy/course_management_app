@@ -20,4 +20,12 @@ router.get(
   validateRequest(TeacherValidations.courseId_params_ValidationZodSchema),
   TeacherControllers.get_courseStudents_byTeacher
 )
+
+// update result by teacher
+router.put(
+  '/result-update',
+  auth('TEACHER'),
+  validateRequest(TeacherValidations.update_result_ValidationZodSchema),
+  TeacherControllers.update_student_result_byTeacher
+)
 export const TeacherRoutes = router

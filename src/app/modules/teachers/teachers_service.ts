@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import PrismaQueryBuilder from '../../builder/PrismaQueryBuilder'
+import AppError from '../../errors/AppError'
 import { TJwtPayload } from '../../interfaces/jwtToken_interface'
 import { prisma } from '../../shared/prisma'
+import { Start_End_DateTime_Validation } from '../../utils/date_Time_Validation'
+import { TResultUpdatePayload } from './teachers_interface'
 
 // get my all Assigned courses from db by Student
 const fetch_my_Assigned_Courses_byTeacher_fromDB = async (
@@ -101,7 +104,7 @@ const fetch_courseStudents_byTeacher_fromDB = async (
     whereCondition.studentId = String(studentId)
   }
 
-  // Global search (name OR email)
+  // Global search (name OR email OR phone)
   if (search) {
     whereCondition.student = {
       user: {
@@ -135,7 +138,7 @@ const fetch_courseStudents_byTeacher_fromDB = async (
     .setBaseQuery({
       ...whereCondition
     })
-    .setSecretFields(['studentId', 'courseId', 'createdAt', 'updatedAt'])
+    .setSecretFields(['studentId', 'createdAt', 'updatedAt'])
     .include({
       student: {
         select: {
@@ -156,6 +159,7 @@ const fetch_courseStudents_byTeacher_fromDB = async (
   const meta = await studentQuery.countTotal()
 
   const formatted = data.map(item => ({
+    courseId: item.courseId,
     studentId: item.student.id,
     email: item.student.user.email,
     phone: item.student.user.phone,
@@ -167,7 +171,144 @@ const fetch_courseStudents_byTeacher_fromDB = async (
   return { data: formatted, meta }
 }
 
+const calculateGrade = (marks: number): string => {
+  if (marks >= 80) return 'A+'
+  if (marks >= 75) return 'A'
+  if (marks >= 70) return 'A-'
+  if (marks >= 65) return 'B+'
+  if (marks >= 60) return 'B'
+  if (marks >= 55) return 'B-'
+  if (marks >= 50) return 'C+'
+  if (marks >= 45) return 'C'
+  if (marks >= 40) return 'D'
+  return 'F'
+}
+
+// update student result byTeacher into DB
+const update_student_result_byTeacher_intoDB = async (
+  user: TJwtPayload,
+  payload: TResultUpdatePayload
+) => {
+  const {
+    courseId,
+    studentId,
+    result,
+    feedback,
+    status,
+    academicYear,
+    semester: sem,
+    completedAt
+  } = payload
+
+  const semester = sem.toLowerCase()
+  // Verify teacher assigned + student enrolled
+  const assignedCourse = await prisma.studentsCourses.findFirst({
+    where: {
+      courseId,
+      studentId,
+      course: {
+        teacherLinks: {
+          some: {
+            teacher: {
+              userId: user.user_id
+            }
+          }
+        }
+      }
+    },
+    select: {
+      id: true,
+      studentId: true,
+      courseId: true,
+      course: {
+        select: {
+          teacherLinks: {
+            where: {
+              teacher: {
+                userId: user.user_id
+              }
+            },
+            select: {
+              teacherId: true
+            }
+          }
+        }
+      }
+    }
+  })
+
+  if (!assignedCourse) {
+    throw new AppError(
+      404,
+      'course',
+      'This course is not found or not assigned to you or this student'
+    )
+  }
+
+  const teacherId = assignedCourse.course.teacherLinks[0]?.teacherId
+
+  if (!teacherId) {
+    throw new AppError(403, 'teacher', 'Unauthorized')
+  }
+
+  const grade = calculateGrade(result)
+
+  const { start: completedTime } = Start_End_DateTime_Validation(
+    completedAt,
+    completedAt
+  )
+
+  // Transaction (atomic operation)
+  await prisma.$transaction(async tx => {
+    // Create result (or use upsert if needed)
+    await tx.results.upsert({
+      where: {
+        studentId_courseId_academicYear_semester: {
+          studentId,
+          courseId,
+          academicYear,
+          semester
+        }
+      },
+      update: {
+        grade,
+        score: result,
+        teacherId,
+        completedAt: completedTime,
+        feedback,
+        status
+      },
+      create: {
+        studentId,
+        courseId,
+        teacherId,
+        grade,
+        score: result,
+        completedAt: completedTime,
+        academicYear,
+        semester,
+        feedback,
+        status
+      }
+    })
+
+    // Update enrollment status
+    await tx.studentsCourses.update({
+      where: {
+        id: assignedCourse.id
+      },
+      data: {
+        status
+      }
+    })
+  })
+
+  return {
+    message: `Student Result Updated Successfully. The Grade is : ${grade}`
+  }
+}
 export const TeacherServices = {
   fetch_my_Assigned_Courses_byTeacher_fromDB,
-  fetch_courseStudents_byTeacher_fromDB
+  fetch_courseStudents_byTeacher_fromDB,
+  update_student_result_byTeacher_intoDB
 }

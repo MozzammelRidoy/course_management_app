@@ -44,7 +44,6 @@ export type ResultsMinAggregateOutputType = {
   status: $Enums.ResultStatus | null
   semester: string | null
   academicYear: string | null
-  enrolledAt: Date | null
   completedAt: Date | null
   feedback: string | null
   isDeleted: boolean | null
@@ -62,7 +61,6 @@ export type ResultsMaxAggregateOutputType = {
   status: $Enums.ResultStatus | null
   semester: string | null
   academicYear: string | null
-  enrolledAt: Date | null
   completedAt: Date | null
   feedback: string | null
   isDeleted: boolean | null
@@ -80,7 +78,6 @@ export type ResultsCountAggregateOutputType = {
   status: number
   semester: number
   academicYear: number
-  enrolledAt: number
   completedAt: number
   feedback: number
   isDeleted: number
@@ -107,7 +104,6 @@ export type ResultsMinAggregateInputType = {
   status?: true
   semester?: true
   academicYear?: true
-  enrolledAt?: true
   completedAt?: true
   feedback?: true
   isDeleted?: true
@@ -125,7 +121,6 @@ export type ResultsMaxAggregateInputType = {
   status?: true
   semester?: true
   academicYear?: true
-  enrolledAt?: true
   completedAt?: true
   feedback?: true
   isDeleted?: true
@@ -143,7 +138,6 @@ export type ResultsCountAggregateInputType = {
   status?: true
   semester?: true
   academicYear?: true
-  enrolledAt?: true
   completedAt?: true
   feedback?: true
   isDeleted?: true
@@ -255,7 +249,6 @@ export type ResultsGroupByOutputType = {
   status: $Enums.ResultStatus
   semester: string | null
   academicYear: string | null
-  enrolledAt: Date
   completedAt: Date | null
   feedback: string | null
   isDeleted: boolean
@@ -294,7 +287,6 @@ export type ResultsWhereInput = {
   status?: Prisma.EnumResultStatusFilter<'Results'> | $Enums.ResultStatus
   semester?: Prisma.StringNullableFilter<'Results'> | string | null
   academicYear?: Prisma.StringNullableFilter<'Results'> | string | null
-  enrolledAt?: Prisma.DateTimeFilter<'Results'> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<'Results'> | Date | string | null
   feedback?: Prisma.StringNullableFilter<'Results'> | string | null
   isDeleted?: Prisma.BoolFilter<'Results'> | boolean
@@ -324,7 +316,6 @@ export type ResultsOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   semester?: Prisma.SortOrderInput | Prisma.SortOrder
   academicYear?: Prisma.SortOrderInput | Prisma.SortOrder
-  enrolledAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   feedback?: Prisma.SortOrderInput | Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
@@ -350,7 +341,6 @@ export type ResultsWhereUniqueInput = Prisma.AtLeast<
     status?: Prisma.EnumResultStatusFilter<'Results'> | $Enums.ResultStatus
     semester?: Prisma.StringNullableFilter<'Results'> | string | null
     academicYear?: Prisma.StringNullableFilter<'Results'> | string | null
-    enrolledAt?: Prisma.DateTimeFilter<'Results'> | Date | string
     completedAt?:
       | Prisma.DateTimeNullableFilter<'Results'>
       | Date
@@ -386,7 +376,6 @@ export type ResultsOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   semester?: Prisma.SortOrderInput | Prisma.SortOrder
   academicYear?: Prisma.SortOrderInput | Prisma.SortOrder
-  enrolledAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   feedback?: Prisma.SortOrderInput | Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
@@ -427,7 +416,6 @@ export type ResultsScalarWhereWithAggregatesInput = {
     | Prisma.StringNullableWithAggregatesFilter<'Results'>
     | string
     | null
-  enrolledAt?: Prisma.DateTimeWithAggregatesFilter<'Results'> | Date | string
   completedAt?:
     | Prisma.DateTimeNullableWithAggregatesFilter<'Results'>
     | Date
@@ -449,7 +437,6 @@ export type ResultsCreateInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -470,7 +457,6 @@ export type ResultsUncheckedCreateInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -487,7 +473,6 @@ export type ResultsUpdateInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -514,7 +499,6 @@ export type ResultsUncheckedUpdateInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -536,7 +520,6 @@ export type ResultsCreateManyInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -553,7 +536,6 @@ export type ResultsUpdateManyMutationInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -577,7 +559,6 @@ export type ResultsUncheckedUpdateManyInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -616,7 +597,6 @@ export type ResultsCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   semester?: Prisma.SortOrder
   academicYear?: Prisma.SortOrder
-  enrolledAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   feedback?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
@@ -638,7 +618,6 @@ export type ResultsMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   semester?: Prisma.SortOrder
   academicYear?: Prisma.SortOrder
-  enrolledAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   feedback?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
@@ -656,7 +635,6 @@ export type ResultsMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   semester?: Prisma.SortOrder
   academicYear?: Prisma.SortOrder
-  enrolledAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   feedback?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
@@ -941,7 +919,6 @@ export type ResultsCreateWithoutCourseInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -960,7 +937,6 @@ export type ResultsUncheckedCreateWithoutCourseInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -1024,7 +1000,6 @@ export type ResultsScalarWhereInput = {
   status?: Prisma.EnumResultStatusFilter<'Results'> | $Enums.ResultStatus
   semester?: Prisma.StringNullableFilter<'Results'> | string | null
   academicYear?: Prisma.StringNullableFilter<'Results'> | string | null
-  enrolledAt?: Prisma.DateTimeFilter<'Results'> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<'Results'> | Date | string | null
   feedback?: Prisma.StringNullableFilter<'Results'> | string | null
   isDeleted?: Prisma.BoolFilter<'Results'> | boolean
@@ -1039,7 +1014,6 @@ export type ResultsCreateWithoutStudentInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -1058,7 +1032,6 @@ export type ResultsUncheckedCreateWithoutStudentInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -1116,7 +1089,6 @@ export type ResultsCreateWithoutTeacherInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -1135,7 +1107,6 @@ export type ResultsUncheckedCreateWithoutTeacherInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -1195,7 +1166,6 @@ export type ResultsCreateManyCourseInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -1212,7 +1182,6 @@ export type ResultsUpdateWithoutCourseInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1237,7 +1206,6 @@ export type ResultsUncheckedUpdateWithoutCourseInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1260,7 +1228,6 @@ export type ResultsUncheckedUpdateManyWithoutCourseInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1281,7 +1248,6 @@ export type ResultsCreateManyStudentInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -1298,7 +1264,6 @@ export type ResultsUpdateWithoutStudentInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1323,7 +1288,6 @@ export type ResultsUncheckedUpdateWithoutStudentInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1346,7 +1310,6 @@ export type ResultsUncheckedUpdateManyWithoutStudentInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1367,7 +1330,6 @@ export type ResultsCreateManyTeacherInput = {
   status?: $Enums.ResultStatus
   semester?: string | null
   academicYear?: string | null
-  enrolledAt?: Date | string
   completedAt?: Date | string | null
   feedback?: string | null
   isDeleted?: boolean
@@ -1384,7 +1346,6 @@ export type ResultsUpdateWithoutTeacherInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1409,7 +1370,6 @@ export type ResultsUncheckedUpdateWithoutTeacherInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1432,7 +1392,6 @@ export type ResultsUncheckedUpdateManyWithoutTeacherInput = {
     | $Enums.ResultStatus
   semester?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicYear?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  enrolledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?:
     | Prisma.NullableDateTimeFieldUpdateOperationsInput
     | Date
@@ -1458,7 +1417,6 @@ export type ResultsSelect<
     status?: boolean
     semester?: boolean
     academicYear?: boolean
-    enrolledAt?: boolean
     completedAt?: boolean
     feedback?: boolean
     isDeleted?: boolean
@@ -1485,7 +1443,6 @@ export type ResultsSelectCreateManyAndReturn<
     status?: boolean
     semester?: boolean
     academicYear?: boolean
-    enrolledAt?: boolean
     completedAt?: boolean
     feedback?: boolean
     isDeleted?: boolean
@@ -1512,7 +1469,6 @@ export type ResultsSelectUpdateManyAndReturn<
     status?: boolean
     semester?: boolean
     academicYear?: boolean
-    enrolledAt?: boolean
     completedAt?: boolean
     feedback?: boolean
     isDeleted?: boolean
@@ -1535,7 +1491,6 @@ export type ResultsSelectScalar = {
   status?: boolean
   semester?: boolean
   academicYear?: boolean
-  enrolledAt?: boolean
   completedAt?: boolean
   feedback?: boolean
   isDeleted?: boolean
@@ -1556,7 +1511,6 @@ export type ResultsOmit<
   | 'status'
   | 'semester'
   | 'academicYear'
-  | 'enrolledAt'
   | 'completedAt'
   | 'feedback'
   | 'isDeleted'
@@ -1610,7 +1564,6 @@ export type $ResultsPayload<
       status: $Enums.ResultStatus
       semester: string | null
       academicYear: string | null
-      enrolledAt: Date
       completedAt: Date | null
       feedback: string | null
       isDeleted: boolean
@@ -2258,7 +2211,6 @@ export interface ResultsFieldRefs {
   readonly status: Prisma.FieldRef<'Results', 'ResultStatus'>
   readonly semester: Prisma.FieldRef<'Results', 'String'>
   readonly academicYear: Prisma.FieldRef<'Results', 'String'>
-  readonly enrolledAt: Prisma.FieldRef<'Results', 'DateTime'>
   readonly completedAt: Prisma.FieldRef<'Results', 'DateTime'>
   readonly feedback: Prisma.FieldRef<'Results', 'String'>
   readonly isDeleted: Prisma.FieldRef<'Results', 'Boolean'>
