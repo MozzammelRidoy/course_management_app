@@ -151,6 +151,17 @@ const fetch_courseStudents_byTeacher_fromDB = async (
                 select: { name: true }
               }
             }
+          },
+          results: {
+            select: {
+              grade: true,
+              status: true,
+              score: true,
+              feedback: true,
+              academicYear: true,
+              semester: true,
+              completedAt: true
+            }
           }
         }
       }
@@ -165,7 +176,8 @@ const fetch_courseStudents_byTeacher_fromDB = async (
     phone: item.student.user.phone,
     name: item.student.user.profile?.name,
     enrolledAt: item.enrolledAt,
-    enrollmentStatus: item.status
+    enrollmentStatus: item.status,
+    result: item.student.results
   }))
 
   return { data: formatted, meta }
