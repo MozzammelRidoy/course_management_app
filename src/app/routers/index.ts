@@ -5,6 +5,7 @@ import { AdminRoutes } from '../modules/admin/admin_route'
 import { UserRoutes } from '../modules/users/users_route'
 import { CourseRoutes } from '../modules/courses/course_route'
 import { StudentRoutes } from '../modules/students/student_route'
+import { TeacherRoutes } from '../modules/teachers/teachers_route'
 
 /**
  * Main router configuration
@@ -38,6 +39,10 @@ const moduleRoutes = [
   {
     path: '/students',
     route: StudentRoutes
+  },
+  {
+    path: '/teachers',
+    route: TeacherRoutes
   },
   {
     path: '/admin',
