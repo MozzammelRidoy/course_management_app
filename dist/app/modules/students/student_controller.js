@@ -27,6 +27,18 @@ const get_my_courses_byStudent = (0, catchAsync_1.default)((req, res) => __await
         meta: result.meta
     });
 }));
+// get my all result by Student
+const get_myResult_byStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield student_service_1.StudentServices.fetch_myResults_byStudent_fromDB(req.user, req.query);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'Retrived All Results',
+        data: result.data,
+        meta: result.meta
+    });
+}));
 exports.StudentControllers = {
-    get_my_courses_byStudent
+    get_my_courses_byStudent,
+    get_myResult_byStudent
 };

@@ -24,6 +24,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudentServices = void 0;
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const PrismaQueryBuilder_1 = __importDefault(require("../../builder/PrismaQueryBuilder"));
 const prisma_1 = require("../../shared/prisma");
 // get my all courses from db by Student
@@ -56,6 +57,89 @@ const fetch_my_courses_by_student_fromDB = (user, query) => __awaiter(void 0, vo
     const meta = yield coursesQuery.countTotal();
     return { data, meta };
 });
+// fetch my all result by Student.
+const fetch_myResults_byStudent_fromDB = (user, query) => __awaiter(void 0, void 0, void 0, function* () {
+    const { search } = query, rest = __rest(query, ["search"]);
+    if (rest.score)
+        rest.score = Number(rest.score);
+    const whereCondition = {
+        isDeleted: false,
+        student: {
+            userId: user.user_id
+        }
+    };
+    // Search by course name OR course code OR semester OR Academic Year
+    if (search) {
+        whereCondition.AND = [
+            {
+                OR: [
+                    {
+                        course: {
+                            name: {
+                                contains: String(search),
+                                mode: 'insensitive'
+                            }
+                        }
+                    },
+                    {
+                        course: {
+                            code: {
+                                contains: String(search),
+                                mode: 'insensitive'
+                            }
+                        }
+                    },
+                    {
+                        academicYear: {
+                            contains: String(search),
+                            mode: 'insensitive'
+                        }
+                    },
+                    {
+                        semester: {
+                            contains: String(search),
+                            mode: 'insensitive'
+                        }
+                    }
+                ]
+            }
+        ];
+    }
+    const resultQuery = new PrismaQueryBuilder_1.default(prisma_1.prisma.results, rest)
+        .setBaseQuery(whereCondition)
+        .setSecretFields([
+        'studentId',
+        'courseId',
+        'teacherId',
+        'isDeleted',
+        'createdAt',
+        'updatedAt'
+    ])
+        .sort()
+        .filter()
+        .fields()
+        .paginate()
+        .include({
+        course: {
+            select: {
+                id: true,
+                code: true,
+                name: true,
+                credits: true,
+                duration: true,
+                level: true,
+                category: true,
+                startDate: true,
+                endDate: true,
+                status: true
+            }
+        }
+    });
+    const data = yield resultQuery.execute();
+    const meta = yield resultQuery.countTotal();
+    return { data, meta };
+});
 exports.StudentServices = {
-    fetch_my_courses_by_student_fromDB
+    fetch_my_courses_by_student_fromDB,
+    fetch_myResults_byStudent_fromDB
 };

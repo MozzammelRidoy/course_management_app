@@ -10,4 +10,6 @@ const student_controller_1 = require("./student_controller");
 const router = express_1.default.Router();
 // fetch my enrolled coures by student.
 router.get('/my-courses', (0, auth_1.default)('STUDENT'), student_controller_1.StudentControllers.get_my_courses_byStudent);
+// fetch my result by Student
+router.get('/my-results', (0, auth_1.default)('STUDENT'), student_controller_1.StudentControllers.get_myResult_byStudent);
 exports.StudentRoutes = router;
