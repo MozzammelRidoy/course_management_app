@@ -5,6 +5,10 @@ const AllowedCourseStatus = CourseStatusValues.filter(
   status => status !== 'ENDED'
 ) as [string, ...string[]]
 
+const AllowedCourseStatusForUpdate = CourseStatusValues.filter(
+  status => status !== 'PENDING'
+) as [string, ...string[]]
+
 // Create Course Validation Schema
 const create_course_ValidationZodScheam = z.object({
   body: z.object({
@@ -63,10 +67,31 @@ const create_course_ValidationZodScheam = z.object({
 
 // course enrollment by student validation schema
 const create_course_enrollment_ValidationZodSchema = z.object({
-  body: z.object({})
+  body: z.object({
+    courseId: z
+      .string({ required_error: 'Course Id is Required!' })
+      .uuid({ message: 'Course Id must be a valid Format!' })
+  })
+})
+
+// update course payload validation schema
+const update_course_byAdmin_ValidationZodSchema = z.object({
+  body: z.object({
+    status: z
+      .enum(AllowedCourseStatusForUpdate, {
+        required_error: 'Course Status is required'
+      })
+      .optional(),
+    isAvailable: z
+      .boolean({
+        required_error: 'Course Availability is required'
+      })
+      .optional()
+  })
 })
 
 export const courseValidations = {
   create_course_ValidationZodScheam,
-  create_course_enrollment_ValidationZodSchema
+  create_course_enrollment_ValidationZodSchema,
+  update_course_byAdmin_ValidationZodSchema
 }

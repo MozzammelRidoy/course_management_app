@@ -51,4 +51,12 @@ router.post(
   CourseControllers.create_Course_byAdmin
 )
 
+// update course by Admin
+router.put(
+  '/course-update/:courseId',
+  auth('SUPER_ADMIN', 'ADMIN'),
+  validateRequest(courseValidations.update_course_byAdmin_ValidationZodSchema),
+  CourseControllers.update_course_byAdmin
+)
+
 export const AdminRoutes = router

@@ -19,3 +19,8 @@ export type TCoursePayload = {
 export type TCourseEnrollmentPayload = {
   courserId: string
 }
+
+export type TCourseUpdatePayload = {
+  status?: CourseStatus
+  isAvailable?: boolean
+}

@@ -60,9 +60,24 @@ const create_enrollment_course_byStudent = catchAsync(async (req, res) => {
   })
 })
 
+// update course by admin
+const update_course_byAdmin = catchAsync(async (req, res) => {
+  const result = await CourseServices.update_course_byAdmin_intoDB(
+    req.params.courseId as string,
+    req.body
+  )
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: 'Course Updated Successfully',
+    data: result
+  })
+})
+
 export const CourseControllers = {
   create_Course_byAdmin,
   get_Courses_byAdmin,
   get_Courses_byStudent,
-  create_enrollment_course_byStudent
+  create_enrollment_course_byStudent,
+  update_course_byAdmin
 }
