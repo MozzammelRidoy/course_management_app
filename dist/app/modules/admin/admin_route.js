@@ -13,6 +13,8 @@ const users_validationZodSchema_1 = require("../users/users_validationZodSchema"
 const users_controller_1 = require("../users/users_controller");
 const course_validationZodSchema_1 = require("../courses/course_validationZodSchema");
 const course_controller_1 = require("../courses/course_controller");
+const admin_controller_1 = require("./admin_controller");
+const admin_validationZodScheam_1 = require("./admin_validationZodScheam");
 const router = express_1.default.Router();
 // =================Institute=======================
 // fetch all institutes for Admin
@@ -29,4 +31,6 @@ router.get('/courses', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), course_contr
 router.post('/course-create', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0, validateRequest_1.default)(course_validationZodSchema_1.courseValidations.create_course_ValidationZodScheam), course_controller_1.CourseControllers.create_Course_byAdmin);
 // update course by Admin
 router.put('/course-update/:courseId', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0, validateRequest_1.default)(course_validationZodSchema_1.courseValidations.update_course_byAdmin_ValidationZodSchema), course_controller_1.CourseControllers.update_course_byAdmin);
+// ==================Dashboard=======================
+router.get('/students-result/:instituteId', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0, validateRequest_1.default)(admin_validationZodScheam_1.AdminValidations.instituteId_params_ValidationZodSchema), admin_controller_1.AdminControllers.fetch_Student_Result_PerInstitute_byAdmin);
 exports.AdminRoutes = router;
