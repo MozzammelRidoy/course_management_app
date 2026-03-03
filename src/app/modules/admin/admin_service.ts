@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Prisma } from '../../../generated/prisma/client'
 import PrismaQueryBuilder from '../../builder/PrismaQueryBuilder'
+import { seed_millon_default_data_insert_intoDB } from '../../seed/seed_million_data_insert'
 import { prisma } from '../../shared/prisma'
 
 const report_student_result_per_institue_byAdmin_fromDB = async (
@@ -178,8 +179,22 @@ const report_Top_ranking_Student_byAdmin_fromDB = async (
   return data
 }
 
+// insert million data with seed function into DB
+const insert_million_data_via_seed_function_intoDB = async (
+  startNumber: number = 1,
+  endNumber: number = 30000
+) => {
+  const result = await seed_millon_default_data_insert_intoDB(
+    startNumber,
+    endNumber
+  )
+
+  return result
+}
+
 export const AdminServices = {
   report_student_result_per_institue_byAdmin_fromDB,
   report_top_courses_perYear_byAdmin_fromDB,
-  report_Top_ranking_Student_byAdmin_fromDB
+  report_Top_ranking_Student_byAdmin_fromDB,
+  insert_million_data_via_seed_function_intoDB
 }

@@ -84,4 +84,11 @@ router.get(
   AdminControllers.fetch_topRanking_Student_byAdmin
 )
 
+// ====================Seed API=================
+router.post(
+  '/seed-insert-million-data',
+  auth('SUPER_ADMIN', 'ADMIN'),
+  validateRequest(AdminValidations.insert_million_data_ValidationZodSchema),
+  AdminControllers.seed_insert_million_data
+)
 export const AdminRoutes = router

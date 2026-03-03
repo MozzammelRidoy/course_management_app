@@ -48,8 +48,25 @@ const fetch_topRanking_Student_byAdmin = catchAsync(async (req, res) => {
   })
 })
 
+// seed insert million data
+const seed_insert_million_data = catchAsync(async (req, res) => {
+  const result =
+    await AdminServices.insert_million_data_via_seed_function_intoDB(
+      req.body.startNumber,
+      req.body.endNumber
+    )
+
+  sendResponse(res, {
+    status: 201,
+    success: true,
+    message: 'Data inserted successfully',
+    data: result
+  })
+})
+
 export const AdminControllers = {
   fetch_Student_Result_PerInstitute_byAdmin,
   fetch_Top_Courses_perYear_byAdmin,
-  fetch_topRanking_Student_byAdmin
+  fetch_topRanking_Student_byAdmin,
+  seed_insert_million_data
 }
