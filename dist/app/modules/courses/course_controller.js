@@ -58,9 +58,20 @@ const create_enrollment_course_byStudent = (0, catchAsync_1.default)((req, res) 
         data: result
     });
 }));
+// update course by admin
+const update_course_byAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield course_service_1.CourseServices.update_course_byAdmin_intoDB(req.params.courseId, req.body);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'Course Updated Successfully',
+        data: result
+    });
+}));
 exports.CourseControllers = {
     create_Course_byAdmin,
     get_Courses_byAdmin,
     get_Courses_byStudent,
-    create_enrollment_course_byStudent
+    create_enrollment_course_byStudent,
+    update_course_byAdmin
 };

@@ -36,7 +36,18 @@ const create_teacher_profile_byAdmin = (0, catchAsync_1.default)((req, res) => _
         data: result
     });
 }));
+// fetch own profile
+const get_ownProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield users_service_1.UserServices.fetch_ownProfile_fromDB(req.user);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'Profile fetched successfully',
+        data: result
+    });
+}));
 exports.UserController = {
     signUp_Student,
-    create_teacher_profile_byAdmin
+    create_teacher_profile_byAdmin,
+    get_ownProfile
 };

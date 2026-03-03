@@ -206,9 +206,43 @@ const enroll_course_byStudent_intoDB = (user, payload) => __awaiter(void 0, void
     });
     return { message: 'Course Enrolled Successfully' };
 });
+// update course by Admin into DB.
+const update_course_byAdmin_intoDB = (courseId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const courseData = yield prisma_1.prisma.courses.findFirst({
+        where: {
+            id: courseId,
+            isDeleted: false
+        }
+    });
+    if (!courseData) {
+        throw new AppError_1.default(404, 'courseId', 'This course is not found!');
+    }
+    // If already ended
+    if (courseData.status === 'ENDED') {
+        throw new AppError_1.default(400, 'status', 'This course has already ended. It cannot be modified.');
+    }
+    // If status change requested
+    if (payload.status && payload.status !== courseData.status) {
+        const allowedTransitions = {
+            PENDING: ['ONGOING'],
+            ONGOING: ['ENDED'],
+            ENDED: []
+        };
+        const allowedNextStatuses = allowedTransitions[courseData.status] || [];
+        if (!allowedNextStatuses.includes(payload.status)) {
+            throw new AppError_1.default(400, 'status', `Invalid status transition from ${courseData.status} to ${payload.status}`);
+        }
+    }
+    const updatedCourse = yield prisma_1.prisma.courses.update({
+        where: { id: courseId },
+        data: { status: payload.status, isAvailable: payload.isAvailable }
+    });
+    return updatedCourse;
+});
 exports.CourseServices = {
     create_course_byAdmin_intoDB,
     fetch_all_courses_byAdmin_fromDB,
     fetch_all_courses_byStudent_fromDB,
-    enroll_course_byStudent_intoDB
+    enroll_course_byStudent_intoDB,
+    update_course_byAdmin_intoDB
 };

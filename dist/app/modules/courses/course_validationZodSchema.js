@@ -4,6 +4,7 @@ exports.courseValidations = void 0;
 const zod_1 = require("zod");
 const course_constant_1 = require("./course_constant");
 const AllowedCourseStatus = course_constant_1.CourseStatusValues.filter(status => status !== 'ENDED');
+const AllowedCourseStatusForUpdate = course_constant_1.CourseStatusValues.filter(status => status !== 'PENDING');
 // Create Course Validation Schema
 const create_course_ValidationZodScheam = zod_1.z.object({
     body: zod_1.z.object({
@@ -55,9 +56,29 @@ const create_course_ValidationZodScheam = zod_1.z.object({
 });
 // course enrollment by student validation schema
 const create_course_enrollment_ValidationZodSchema = zod_1.z.object({
-    body: zod_1.z.object({})
+    body: zod_1.z.object({
+        courseId: zod_1.z
+            .string({ required_error: 'Course Id is Required!' })
+            .uuid({ message: 'Course Id must be a valid Format!' })
+    })
+});
+// update course payload validation schema
+const update_course_byAdmin_ValidationZodSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        status: zod_1.z
+            .enum(AllowedCourseStatusForUpdate, {
+            required_error: 'Course Status is required'
+        })
+            .optional(),
+        isAvailable: zod_1.z
+            .boolean({
+            required_error: 'Course Availability is required'
+        })
+            .optional()
+    })
 });
 exports.courseValidations = {
     create_course_ValidationZodScheam,
-    create_course_enrollment_ValidationZodSchema
+    create_course_enrollment_ValidationZodSchema,
+    update_course_byAdmin_ValidationZodSchema
 };

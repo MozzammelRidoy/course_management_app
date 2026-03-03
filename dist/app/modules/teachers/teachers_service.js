@@ -148,6 +148,17 @@ const fetch_courseStudents_byTeacher_fromDB = (user, courseId, query) => __await
                             select: { name: true }
                         }
                     }
+                },
+                results: {
+                    select: {
+                        grade: true,
+                        status: true,
+                        score: true,
+                        feedback: true,
+                        academicYear: true,
+                        semester: true,
+                        completedAt: true
+                    }
                 }
             }
         }
@@ -163,7 +174,8 @@ const fetch_courseStudents_byTeacher_fromDB = (user, courseId, query) => __await
             phone: item.student.user.phone,
             name: (_a = item.student.user.profile) === null || _a === void 0 ? void 0 : _a.name,
             enrolledAt: item.enrolledAt,
-            enrollmentStatus: item.status
+            enrollmentStatus: item.status,
+            result: item.student.results
         });
     });
     return { data: formatted, meta };
