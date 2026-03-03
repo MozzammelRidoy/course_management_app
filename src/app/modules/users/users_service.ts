@@ -247,7 +247,51 @@ const create_Teacher_byAmin_intoDB = async (payload: TTeacherSignupPayload) => {
     throw new AppError(400, '', 'Failed to create teacher profile.')
   }
 }
+
+// fetch own profile by any user.
+const fetch_ownProfile_fromDB = async (user: TJwtPayload) => {
+  const userData = await prisma.users.findFirst({
+    where: {
+      id: user.user_id,
+      isDeleted: false
+    },
+    select: {
+      id: true,
+      email: true,
+      phone: true,
+      isActive: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+      passwordChangedAt: true,
+      profile: {
+        select: {
+          name: true,
+          bio: true,
+          image: true,
+          gender: true,
+          location: true,
+          dateOfBirth: true
+        }
+      }
+    }
+  })
+
+  if (!userData) {
+    throw new AppError(404, 'user', 'User not found or Deleted!')
+  }
+  if (!userData.isActive) {
+    throw new AppError(
+      401,
+      'user',
+      'You are blocked! Contact support for more info.'
+    )
+  }
+
+  return userData
+}
 export const UserServices = {
   signup_student_intoDB,
-  create_Teacher_byAmin_intoDB
+  create_Teacher_byAmin_intoDB,
+  fetch_ownProfile_fromDB
 }

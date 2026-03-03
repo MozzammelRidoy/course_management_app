@@ -24,7 +24,19 @@ const create_teacher_profile_byAdmin = catchAsync(async (req, res) => {
   })
 })
 
+// fetch own profile
+const get_ownProfile = catchAsync(async (req, res) => {
+  const result = await UserServices.fetch_ownProfile_fromDB(req.user)
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: 'Profile fetched successfully',
+    data: result
+  })
+})
+
 export const UserController = {
   signUp_Student,
-  create_teacher_profile_byAdmin
+  create_teacher_profile_byAdmin,
+  get_ownProfile
 }
