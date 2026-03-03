@@ -27,6 +27,7 @@ exports.AdminServices = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const client_1 = require("../../../generated/prisma/client");
 const PrismaQueryBuilder_1 = __importDefault(require("../../builder/PrismaQueryBuilder"));
+const seed_million_data_insert_1 = require("../../seed/seed_million_data_insert");
 const prisma_1 = require("../../shared/prisma");
 const report_student_result_per_institue_byAdmin_fromDB = (instituteId, query) => __awaiter(void 0, void 0, void 0, function* () {
     const { search } = query, rest = __rest(query, ["search"]);
@@ -175,8 +176,14 @@ const report_Top_ranking_Student_byAdmin_fromDB = (query) => __awaiter(void 0, v
   `;
     return data;
 });
+// insert million data with seed function into DB
+const insert_million_data_via_seed_function_intoDB = (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (startNumber = 1, endNumber = 30000) {
+    const result = yield (0, seed_million_data_insert_1.seed_millon_default_data_insert_intoDB)(startNumber, endNumber);
+    return result;
+});
 exports.AdminServices = {
     report_student_result_per_institue_byAdmin_fromDB,
     report_top_courses_perYear_byAdmin_fromDB,
-    report_Top_ranking_Student_byAdmin_fromDB
+    report_Top_ranking_Student_byAdmin_fromDB,
+    insert_million_data_via_seed_function_intoDB
 };

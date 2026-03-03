@@ -38,4 +38,6 @@ router.get('/students-result/:instituteId', (0, auth_1.default)('SUPER_ADMIN', '
 router.get('/top-courses', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), admin_controller_1.AdminControllers.fetch_Top_Courses_perYear_byAdmin);
 // Top Ranking student by Admin
 router.get('/top-ranking-students', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), admin_controller_1.AdminControllers.fetch_topRanking_Student_byAdmin);
+// ====================Seed API=================
+router.post('/seed-insert-million-data', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0, validateRequest_1.default)(admin_validationZodScheam_1.AdminValidations.insert_million_data_ValidationZodSchema), admin_controller_1.AdminControllers.seed_insert_million_data);
 exports.AdminRoutes = router;

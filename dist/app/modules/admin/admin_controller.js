@@ -47,8 +47,19 @@ const fetch_topRanking_Student_byAdmin = (0, catchAsync_1.default)((req, res) =>
         data: result
     });
 }));
+// seed insert million data
+const seed_insert_million_data = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield admin_service_1.AdminServices.insert_million_data_via_seed_function_intoDB(req.body.startNumber, req.body.endNumber);
+    (0, sendResponse_1.default)(res, {
+        status: 201,
+        success: true,
+        message: 'Data inserted successfully',
+        data: result
+    });
+}));
 exports.AdminControllers = {
     fetch_Student_Result_PerInstitute_byAdmin,
     fetch_Top_Courses_perYear_byAdmin,
-    fetch_topRanking_Student_byAdmin
+    fetch_topRanking_Student_byAdmin,
+    seed_insert_million_data
 };
