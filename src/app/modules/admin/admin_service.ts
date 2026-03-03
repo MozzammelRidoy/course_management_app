@@ -105,6 +105,39 @@ const report_student_result_per_institue_byAdmin_fromDB = async (
   return { data, meta }
 }
 
+// report top courses per year fetch by Admin.
+const report_top_courses_perYear_byAdmin_fromDB = async (
+  query: Record<string, unknown>
+) => {
+  const { year, limit = 5 } = query
+
+  const yearFilter = year
+    ? `WHERE EXTRACT(YEAR FROM sc."enrolledAt") = ${Number(year)}`
+    : ''
+
+  const data = await prisma.$queryRawUnsafe(`
+    SELECT 
+      c.id AS "courseId",
+      c.name AS "courseName",
+      c.code AS "courseCode",
+      c.credits AS "courseCredits",
+      c.duration AS "courseDuration",
+      c.level AS "courseLevel",
+      c.status AS "courseStatus",
+      EXTRACT(YEAR FROM sc."enrolledAt") AS "year",
+      COUNT(sc."studentId") AS "totalStudents"
+    FROM students_courses sc
+    JOIN courses c ON c.id = sc."courseId"
+    ${yearFilter}
+    GROUP BY c.id, c.name, c.code, "year"
+    ORDER BY "totalStudents" DESC
+    LIMIT ${Number(limit)}
+  `)
+
+  return data
+}
+
 export const AdminServices = {
-  report_student_result_per_institue_byAdmin_fromDB
+  report_student_result_per_institue_byAdmin_fromDB,
+  report_top_courses_perYear_byAdmin_fromDB
 }

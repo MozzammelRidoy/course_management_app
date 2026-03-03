@@ -62,11 +62,19 @@ router.put(
 )
 
 // ==================Dashboard=======================
+// student result per institute by admin.
 router.get(
   '/students-result/:instituteId',
   auth('SUPER_ADMIN', 'ADMIN'),
   validateRequest(AdminValidations.instituteId_params_ValidationZodSchema),
   AdminControllers.fetch_Student_Result_PerInstitute_byAdmin
+)
+
+// Top coursers per year by admin.
+router.get(
+  '/top-courses',
+  auth('SUPER_ADMIN', 'ADMIN'),
+  AdminControllers.fetch_Top_Courses_perYear_byAdmin
 )
 
 export const AdminRoutes = router

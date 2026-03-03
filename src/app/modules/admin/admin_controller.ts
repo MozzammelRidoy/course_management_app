@@ -21,6 +21,20 @@ const fetch_Student_Result_PerInstitute_byAdmin = catchAsync(
   }
 )
 
+// fetct top courses per year byAdmin
+const fetch_Top_Courses_perYear_byAdmin = catchAsync(async (req, res) => {
+  const result = await AdminServices.report_top_courses_perYear_byAdmin_fromDB(
+    req.query
+  )
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: 'Top courses fetched successfully',
+    data: result
+  })
+})
+
 export const AdminControllers = {
-  fetch_Student_Result_PerInstitute_byAdmin
+  fetch_Student_Result_PerInstitute_byAdmin,
+  fetch_Top_Courses_perYear_byAdmin
 }
