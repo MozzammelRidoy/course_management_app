@@ -25,6 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminServices = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
+const client_1 = require("../../../generated/prisma/client");
 const PrismaQueryBuilder_1 = __importDefault(require("../../builder/PrismaQueryBuilder"));
 const prisma_1 = require("../../shared/prisma");
 const report_student_result_per_institue_byAdmin_fromDB = (instituteId, query) => __awaiter(void 0, void 0, void 0, function* () {
@@ -121,6 +122,61 @@ const report_student_result_per_institue_byAdmin_fromDB = (instituteId, query) =
     const meta = yield resultQuery.countTotal();
     return { data, meta };
 });
+// report top courses per year fetch by Admin.
+const report_top_courses_perYear_byAdmin_fromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const { year, limit = 5 } = query;
+    const conditions = [];
+    if (year) {
+        conditions.push(client_1.Prisma.sql `EXTRACT(YEAR FROM sc."enrolledAt") = ${Number(year)}`);
+    }
+    const whereClause = conditions.length > 0
+        ? client_1.Prisma.sql `WHERE ${client_1.Prisma.join(conditions, ' AND ')}`
+        : client_1.Prisma.empty;
+    const data = yield prisma_1.prisma.$queryRaw(client_1.Prisma.sql `
+      SELECT 
+        c.id AS "courseId",
+        c.name AS "courseName",
+        c.code AS "courseCode",
+        c.credits AS "courseCredits",
+        c.duration AS "courseDuration",
+        c.level AS "courseLevel",
+        c.status AS "courseStatus",
+        EXTRACT(YEAR FROM sc."enrolledAt") AS "year",
+        COUNT(sc."studentId") AS "totalStudents"
+      FROM students_courses sc
+      JOIN courses c ON c.id = sc."courseId"
+      ${whereClause}
+      GROUP BY 
+        c.id, c.name, c.code,
+        c.credits, c.duration, c.level, c.status, "year"
+      ORDER BY "totalStudents" DESC
+      LIMIT ${Number(limit)}
+    `);
+    return data;
+});
+// report Top Ranking student based on higest marks by Amdin
+const report_Top_ranking_Student_byAdmin_fromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const { limit = 10 } = query;
+    const data = yield prisma_1.prisma.$queryRaw `
+    SELECT *
+    FROM (
+      SELECT 
+        s.id AS "studentId",
+        p.name AS "studentName",
+        SUM(r.score) AS "totalMarks",
+        RANK() OVER (ORDER BY SUM(r.score) DESC) AS "rank"
+      FROM results r
+      JOIN students s ON s.id = r."studentId"
+      JOIN users u ON u.id = s."userId"
+      JOIN profiles p ON p."userId" = u.id
+      GROUP BY s.id, p.name
+    ) ranked_students
+    WHERE "rank" <= ${Number(limit)};
+  `;
+    return data;
+});
 exports.AdminServices = {
-    report_student_result_per_institue_byAdmin_fromDB
+    report_student_result_per_institue_byAdmin_fromDB,
+    report_top_courses_perYear_byAdmin_fromDB,
+    report_Top_ranking_Student_byAdmin_fromDB
 };

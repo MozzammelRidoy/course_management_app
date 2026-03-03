@@ -32,5 +32,10 @@ router.post('/course-create', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0, v
 // update course by Admin
 router.put('/course-update/:courseId', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0, validateRequest_1.default)(course_validationZodSchema_1.courseValidations.update_course_byAdmin_ValidationZodSchema), course_controller_1.CourseControllers.update_course_byAdmin);
 // ==================Dashboard=======================
+// student result per institute by admin.
 router.get('/students-result/:instituteId', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), (0, validateRequest_1.default)(admin_validationZodScheam_1.AdminValidations.instituteId_params_ValidationZodSchema), admin_controller_1.AdminControllers.fetch_Student_Result_PerInstitute_byAdmin);
+// Top coursers per year by admin.
+router.get('/top-courses', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), admin_controller_1.AdminControllers.fetch_Top_Courses_perYear_byAdmin);
+// Top Ranking student by Admin
+router.get('/top-ranking-students', (0, auth_1.default)('SUPER_ADMIN', 'ADMIN'), admin_controller_1.AdminControllers.fetch_topRanking_Student_byAdmin);
 exports.AdminRoutes = router;

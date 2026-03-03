@@ -27,6 +27,28 @@ const fetch_Student_Result_PerInstitute_byAdmin = (0, catchAsync_1.default)((req
         meta: result.meta
     });
 }));
+// fetct top courses per year byAdmin
+const fetch_Top_Courses_perYear_byAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield admin_service_1.AdminServices.report_top_courses_perYear_byAdmin_fromDB(req.query);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'Top courses fetched successfully',
+        data: result
+    });
+}));
+// fetch top ranking student by admin.
+const fetch_topRanking_Student_byAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield admin_service_1.AdminServices.report_Top_ranking_Student_byAdmin_fromDB(req.query);
+    (0, sendResponse_1.default)(res, {
+        status: 200,
+        success: true,
+        message: 'Top ranking student fetched successfully',
+        data: result
+    });
+}));
 exports.AdminControllers = {
-    fetch_Student_Result_PerInstitute_byAdmin
+    fetch_Student_Result_PerInstitute_byAdmin,
+    fetch_Top_Courses_perYear_byAdmin,
+    fetch_topRanking_Student_byAdmin
 };
