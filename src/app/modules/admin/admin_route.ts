@@ -77,4 +77,11 @@ router.get(
   AdminControllers.fetch_Top_Courses_perYear_byAdmin
 )
 
+// Top Ranking student by Admin
+router.get(
+  '/top-ranking-students',
+  auth('SUPER_ADMIN', 'ADMIN'),
+  AdminControllers.fetch_topRanking_Student_byAdmin
+)
+
 export const AdminRoutes = router

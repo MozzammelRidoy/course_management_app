@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Prisma } from '../../../generated/prisma/client'
 import PrismaQueryBuilder from '../../builder/PrismaQueryBuilder'
 import { prisma } from '../../shared/prisma'
 
@@ -106,38 +107,79 @@ const report_student_result_per_institue_byAdmin_fromDB = async (
 }
 
 // report top courses per year fetch by Admin.
+
 const report_top_courses_perYear_byAdmin_fromDB = async (
   query: Record<string, unknown>
 ) => {
   const { year, limit = 5 } = query
 
-  const yearFilter = year
-    ? `WHERE EXTRACT(YEAR FROM sc."enrolledAt") = ${Number(year)}`
-    : ''
+  const conditions = []
 
-  const data = await prisma.$queryRawUnsafe(`
-    SELECT 
-      c.id AS "courseId",
-      c.name AS "courseName",
-      c.code AS "courseCode",
-      c.credits AS "courseCredits",
-      c.duration AS "courseDuration",
-      c.level AS "courseLevel",
-      c.status AS "courseStatus",
-      EXTRACT(YEAR FROM sc."enrolledAt") AS "year",
-      COUNT(sc."studentId") AS "totalStudents"
-    FROM students_courses sc
-    JOIN courses c ON c.id = sc."courseId"
-    ${yearFilter}
-    GROUP BY c.id, c.name, c.code, "year"
-    ORDER BY "totalStudents" DESC
-    LIMIT ${Number(limit)}
-  `)
+  if (year) {
+    conditions.push(
+      Prisma.sql`EXTRACT(YEAR FROM sc."enrolledAt") = ${Number(year)}`
+    )
+  }
+
+  const whereClause =
+    conditions.length > 0
+      ? Prisma.sql`WHERE ${Prisma.join(conditions, ' AND ')}`
+      : Prisma.empty
+
+  const data = await prisma.$queryRaw(
+    Prisma.sql`
+      SELECT 
+        c.id AS "courseId",
+        c.name AS "courseName",
+        c.code AS "courseCode",
+        c.credits AS "courseCredits",
+        c.duration AS "courseDuration",
+        c.level AS "courseLevel",
+        c.status AS "courseStatus",
+        EXTRACT(YEAR FROM sc."enrolledAt") AS "year",
+        COUNT(sc."studentId") AS "totalStudents"
+      FROM students_courses sc
+      JOIN courses c ON c.id = sc."courseId"
+      ${whereClause}
+      GROUP BY 
+        c.id, c.name, c.code,
+        c.credits, c.duration, c.level, c.status, "year"
+      ORDER BY "totalStudents" DESC
+      LIMIT ${Number(limit)}
+    `
+  )
+
+  return data
+}
+
+// report Top Ranking student based on higest marks by Amdin
+const report_Top_ranking_Student_byAdmin_fromDB = async (
+  query: Record<string, unknown>
+) => {
+  const { limit = 10 } = query
+
+  const data = await prisma.$queryRaw`
+    SELECT *
+    FROM (
+      SELECT 
+        s.id AS "studentId",
+        p.name AS "studentName",
+        SUM(r.score) AS "totalMarks",
+        RANK() OVER (ORDER BY SUM(r.score) DESC) AS "rank"
+      FROM results r
+      JOIN students s ON s.id = r."studentId"
+      JOIN users u ON u.id = s."userId"
+      JOIN profiles p ON p."userId" = u.id
+      GROUP BY s.id, p.name
+    ) ranked_students
+    WHERE "rank" <= ${Number(limit)};
+  `
 
   return data
 }
 
 export const AdminServices = {
   report_student_result_per_institue_byAdmin_fromDB,
-  report_top_courses_perYear_byAdmin_fromDB
+  report_top_courses_perYear_byAdmin_fromDB,
+  report_Top_ranking_Student_byAdmin_fromDB
 }
