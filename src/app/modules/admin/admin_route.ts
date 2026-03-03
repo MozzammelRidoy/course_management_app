@@ -7,6 +7,8 @@ import { UserValidations } from '../users/users_validationZodSchema'
 import { UserController } from '../users/users_controller'
 import { courseValidations } from '../courses/course_validationZodSchema'
 import { CourseControllers } from '../courses/course_controller'
+import { AdminControllers } from './admin_controller'
+import { AdminValidations } from './admin_validationZodScheam'
 
 const router = express.Router()
 // =================Institute=======================
@@ -57,6 +59,14 @@ router.put(
   auth('SUPER_ADMIN', 'ADMIN'),
   validateRequest(courseValidations.update_course_byAdmin_ValidationZodSchema),
   CourseControllers.update_course_byAdmin
+)
+
+// ==================Dashboard=======================
+router.get(
+  '/students-result/:instituteId',
+  auth('SUPER_ADMIN', 'ADMIN'),
+  validateRequest(AdminValidations.instituteId_params_ValidationZodSchema),
+  AdminControllers.fetch_Student_Result_PerInstitute_byAdmin
 )
 
 export const AdminRoutes = router
