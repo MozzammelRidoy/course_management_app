@@ -166,6 +166,7 @@ exports.ResultsScalarFieldEnum = {
     status: 'status',
     semester: 'semester',
     academicYear: 'academicYear',
+    enrolledAt: 'enrolledAt',
     completedAt: 'completedAt',
     feedback: 'feedback',
     isDeleted: 'isDeleted',
